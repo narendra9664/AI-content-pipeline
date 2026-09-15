@@ -1,0 +1,39 @@
+Make a short about unqualified lead waste for luxury real estate developers.
+
+CONTEXT:
+AI-powered lead qualification and routing for luxury property developers. Target audience: Luxury Real Estate Developers selling $2M+ properties.
+
+BRAND IDENTITY:
+- Dark background (#0A0A0F)
+- Primary accent: Electric Blue (#00A3FF)
+- Secondary accent: Gold (#FFD700)
+- Typography: Clean sans-serif, bold headlines
+- Style: Animated infographics, data visualizations, flow diagrams
+- Tone: Educational authority — teach, don't sell
+
+THE HOOK:
+"Your sales team is calling ghosts"
+
+THE PAIN POINT:
+Agents spend 80%+ of their time on leads who were never going to buy. That's not sales — that's cold calling with extra steps.
+
+VISUAL STYLE:
+Animated funnel: 100 leads pour in at top → filter shows only 3 glow as 'real buyers' → 97 fade to grey ghosts. Dark background, electric blue and gold accents. Premium, data-driven, authoritative.
+
+THE 6-BEAT STRUCTURE:
+Beat 1 (HOOK, 0-3s): "Your sales team called 40 leads today."
+Beat 2 (SETUP, 3-10s): "They pitched, followed up, sent brochures. That's 6 hours of work."
+Beat 3 (QUIZ, 10-18s): "How many of those 40 were actually ready to spend $2M+?"
+Beat 4 (REVEAL, 18-28s): "Three. The other 37 were browsing. Your closers were working as receptionists."
+Beat 5 (TWIST, 28-36s): "The 3 real buyers? They waited 4 hours for a callback. One already talked to your competitor."
+Beat 6 (LOOP, 36-40s): "Your sales team called 40 leads today..."
+
+RULES:
+- Frame 0 IS the thumbnail. Make it visually striking.
+- The last frame must seamlessly loop back to frame 0.
+- Use word-synced captions (built-in feature).
+- Include subtle sound effects for data reveals and transitions.
+- No engagement-bait outros ("like and subscribe").
+- Keep voiceover pace conversational — not rushed.
+- End with quiet confidence, not a hard sell.
+- Use ElevenLabs voice: Liam (TX3LPaxmHKxFdv7VOQHJ)

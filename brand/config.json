@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "name": "frontdesk AI",
+    "tagline": "AI Automation for Luxury Real Estate",
+    "website": "https://yourdomain.com",
+    "instagram": "@youragency",
+    "niche": "Luxury Real Estate Developers",
+    "service": "AI-powered lead qualification and routing for luxury property developers"
+  },
+
+  "visual_identity": {
+    "primary_color": "#00A3FF",
+    "primary_color_name": "Electric Blue",
+    "secondary_color": "#FFD700",
+    "secondary_color_name": "Gold",
+    "background": "#0A0A0F",
+    "background_name": "Deep Dark",
+    "surface": "#12121A",
+    "surface_name": "Card Dark",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#A0A0B0",
+    "accent_success": "#00E676",
+    "accent_danger": "#FF4444",
+    "accent_warning": "#FFB300",
+    "gradient": "linear-gradient(135deg, #00A3FF, #7C4DFF)",
+    "style_notes": "Luxury + Tech. Think: Bloomberg terminal meets penthouse marketing. Clean, data-driven, authoritative."
+  },
+
+  "typography": {
+    "heading_font": "Inter",
+    "body_font": "Inter",
+    "mono_font": "JetBrains Mono",
+    "heading_weight": 700,
+    "body_weight": 400,
+    "caption_weight": 600
+  },
+
+  "voice_settings": {
+    "provider": "elevenlabs",
+    "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+    "voice_name": "Liam",
+    "voice_notes": "Professional, authoritative but approachable. Not salesy. Think: trusted consultant briefing a CEO.",
+    "speed": 1.0,
+    "stability": 0.5,
+    "similarity_boost": 0.75,
+    "custom_voice_clone": false,
+    "custom_voice_clone_notes": "If you want to clone your own voice, record 30 minutes of clean audio and upload to ElevenLabs. Much more authentic."
+  },
+
+  "video_settings": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration_seconds": 40,
+    "format": "mp4",
+    "aspect_ratio": "9:16",
+    "visual_track": "tsx",
+    "visual_track_notes": "TSX = pure code animation (infographics, charts, diagrams). Best for educational/data content."
+  },
+
+  "content_rules": {
+    "tone": "Educational authority — teach, don't sell",
+    "perspective": "Second person ('you', 'your team')",
+    "never_say": [
+      "Buy now",
+      "Limited time offer",
+      "Click the link in bio",
+      "Don't miss out",
+      "Subscribe for more"
+    ],
+    "always_include": [
+      "A specific pain point from luxury real estate",
+      "A data point or number",
+      "A visual metaphor the viewer can picture",
+      "An identity statement at the end"
+    ],
+    "psychology_principles": [
+      "Loss Aversion: Frame as what they're losing, not gaining",
+      "Curiosity Gap: Start with incomplete information",
+      "Social Proof: Reference what top developers do",
+      "Authority: Teach, let them conclude they need you",
+      "Identity: End with who they want to be"
+    ]
+  },
+
+  "cta_rotation": {
+    "soft_ctas": [
+      "Save this for your next team meeting.",
+      "Share this with your sales director.",
+      "Follow for weekly breakdowns like this.",
+      "Bookmark this — you'll need it."
+    ],
+    "direct_ctas": [
+      "DM 'AUDIT' for a free lead system review.",
+      "Link in bio for a 15-minute walkthrough.",
+      "Comment 'READY' and I'll send you the breakdown."
+    ],
+    "rotation_rule": "Alternate: 3 soft CTAs, then 1 direct CTA per month"
+  },
+
+  "hashtags": {
+    "always_use": [
+      "#luxuryrealestate",
+      "#realestateleads",
+      "#aiautomation",
+      "#propertydevelopment",
+      "#realestatetechnology"
+    ],
+    "rotate": [
+      "#leadgeneration",
+      "#salesautomation",
+      "#realestatemarketing",
+      "#luxuryhomes",
+      "#proptech",
+      "#realestateinvesting",
+      "#closingdeals",
+      "#realestateagent",
+      "#developmentlife",
+      "#aiinbusiness"
+    ]
+  },
+
+  "watermark": {
+    "enabled": true,
+    "position": "bottom-right",
+    "opacity": 0.6,
+    "text": "@youragency"
+  }
+}

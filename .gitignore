@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Environment variables (contains API keys)
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Rendered videos (too large for git)
+output/**/*.mp4
+output/**/*.mov
+output/**/*.avi
+
+# Cloned sub-repos & build artifacts
+shorts-creator/
+claude-faceless-shorts-creator/
+
+# Logs
+*.log
