@@ -132,37 +132,81 @@ function sendToSlack(options = {}) {
 
   // 3. Optional Direct Bot Token Upload if SLACK_BOT_TOKEN is present
   if (botToken && fs.existsSync(videoFile)) {
-    console.log(`📡 Uploading MP4 file directly via Slack Bot Token...`);
+    console.log(`📡 Uploading MP4 file directly via Slack Bot Token using modern Slack API...`);
     try {
       const fileBuffer = fs.readFileSync(videoFile);
-      const boundary = '----SlackBoundary' + Date.now().toString(16);
-      const initialComment = `🎬 *${brand.name} — Week ${topic.week} Video:* ${topic.title}\n\n🪝 *Hook:* "${topic.hook}"\n📢 *CTA:* "${topic.cta}"`;
+      const filename = path.basename(videoFile);
+      const fileSize = fileBuffer.length;
+      const channelId = process.env.SLACK_CHANNEL_ID;
 
-      let bodyStr = `--${boundary}\r\nContent-Disposition: form-data; name="initial_comment"\r\n\r\n${initialComment}\r\n`;
-      bodyStr += `--${boundary}\r\nContent-Disposition: form-data; name="filename"\r\n\r\n${path.basename(videoFile)}\r\n`;
-      bodyStr += `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${path.basename(videoFile)}"\r\nContent-Type: application/octet-stream\r\n\r\n`;
-
-      const footerStr = `\r\n--${boundary}--\r\n`;
-      const payloadBuf = Buffer.concat([Buffer.from(bodyStr, 'utf8'), fileBuffer, Buffer.from(footerStr, 'utf8')]);
-
-      const reqUpload = https.request({
+      const getUrlReq = https.request({
         hostname: 'slack.com',
-        port: 443,
-        path: '/api/files.upload',
+        path: `/api/files.getUploadURLExternal?filename=${encodeURIComponent(filename)}&length=${fileSize}`,
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${botToken}`,
-          'Content-Type': `multipart/form-data; boundary=${boundary}`,
-          'Content-Length': payloadBuf.length
+          'Authorization': `Bearer ${botToken}`
         }
-      }, (res) => {
-        let respData = '';
-        res.on('data', c => respData += c);
-        res.on('end', () => console.log(`✅ Direct MP4 Upload Response:`, respData));
+      }, res => {
+        let body = '';
+        res.on('data', c => body += c);
+        res.on('end', () => {
+          try {
+            const data = JSON.parse(body);
+            if (!data.ok || !data.upload_url) {
+              console.error(`❌ Slack getUploadURLExternal error:`, body);
+              return;
+            }
+
+            const urlObj = new URL(data.upload_url);
+            const uploadReq = https.request({
+              hostname: urlObj.hostname,
+              path: urlObj.pathname + urlObj.search,
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/octet-stream',
+                'Content-Length': fileSize
+              }
+            }, upRes => {
+              let upBody = '';
+              upRes.on('data', c => upBody += c);
+              upRes.on('end', () => {
+                const completePayload = JSON.stringify({
+                  files: [{ id: data.file_id, title: `${brand.name} — Week ${topic.week} Video` }],
+                  channel_id: channelId || undefined,
+                  initial_comment: `🎬 *${brand.name} — Week ${topic.week} Video Reel Attached Below!*`
+                });
+
+                const completeReq = https.request({
+                  hostname: 'slack.com',
+                  path: '/api/files.completeUploadExternal',
+                  method: 'POST',
+                  headers: {
+                    'Authorization': `Bearer ${botToken}`,
+                    'Content-Type': 'application/json; charset=utf-8'
+                  }
+                }, compRes => {
+                  let compBody = '';
+                  compRes.on('data', c => compBody += c);
+                  compRes.on('end', () => {
+                    console.log(`✅ Direct MP4 Upload Complete:`, compBody);
+                  });
+                });
+
+                completeReq.write(completePayload);
+                completeReq.end();
+              });
+            });
+
+            uploadReq.write(fileBuffer);
+            uploadReq.end();
+
+          } catch (e) {
+            console.error(`❌ Upload parsing error: ${e.message}`);
+          }
+        });
       });
-      reqUpload.on('error', e => console.error(`❌ Slack upload error: ${e.message}`));
-      reqUpload.write(payloadBuf);
-      reqUpload.end();
+
+      getUrlReq.end();
     } catch (e) {
       console.error(`❌ Failed file upload: ${e.message}`);
     }
