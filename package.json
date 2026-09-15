@@ -1,0 +1,30 @@
+{
+  "name": "frontdesk-ai-content-pipeline",
+  "version": "1.0.0",
+  "description": "Weekly Motion Graphic Video Pipeline for frontdesk AI",
+  "main": "scripts/generate-weekly-brief.js",
+  "scripts": {
+    "brief": "node scripts/generate-weekly-brief.js",
+    "topic": "node scripts/topic-picker.js",
+    "voice": "node scripts/generate-free-voice.js",
+    "slack": "node scripts/send-to-slack.js"
+  },
+  "dependencies": {
+    "@remotion/bundler": "*",
+    "@remotion/cli": "*",
+    "@remotion/google-fonts": "*",
+    "@remotion/paths": "*",
+    "@remotion/renderer": "*",
+    "@remotion/shapes": "*",
+    "chroma-js": "^3.2.0",
+    "lucide-react": "^0.300.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.0.0"
+  }
+}
