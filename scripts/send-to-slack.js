@@ -52,6 +52,7 @@ function sendToSlack(options = {}) {
   }
 
   const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+  const botToken = process.env.SLACK_BOT_TOKEN;
 
   console.log(`\n==================================================`);
   console.log(`🚀 Dispatching Reel Notification to Slack...`);
@@ -122,19 +123,56 @@ function sendToSlack(options = {}) {
         elements: [
           {
             type: "mrkdwn",
-            text: `Automated by *GitHub Actions* for *${brand.name}* | $0.00 Pipeline`
+            text: `Automated by *GitHub Actions* for *${brand.name}* | Every Monday at 8:00 AM IST`
           }
         ]
       }
     ]
   };
 
-  // 3. Send Payload or Dry-Run
+  // 3. Optional Direct Bot Token Upload if SLACK_BOT_TOKEN is present
+  if (botToken && fs.existsSync(videoFile)) {
+    console.log(`📡 Uploading MP4 file directly via Slack Bot Token...`);
+    try {
+      const fileBuffer = fs.readFileSync(videoFile);
+      const boundary = '----SlackBoundary' + Date.now().toString(16);
+      const initialComment = `🎬 *${brand.name} — Week ${topic.week} Video:* ${topic.title}\n\n🪝 *Hook:* "${topic.hook}"\n📢 *CTA:* "${topic.cta}"`;
+
+      let bodyStr = `--${boundary}\r\nContent-Disposition: form-data; name="initial_comment"\r\n\r\n${initialComment}\r\n`;
+      bodyStr += `--${boundary}\r\nContent-Disposition: form-data; name="filename"\r\n\r\n${path.basename(videoFile)}\r\n`;
+      bodyStr += `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${path.basename(videoFile)}"\r\nContent-Type: application/octet-stream\r\n\r\n`;
+
+      const footerStr = `\r\n--${boundary}--\r\n`;
+      const payloadBuf = Buffer.concat([Buffer.from(bodyStr, 'utf8'), fileBuffer, Buffer.from(footerStr, 'utf8')]);
+
+      const reqUpload = https.request({
+        hostname: 'slack.com',
+        port: 443,
+        path: '/api/files.upload',
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${botToken}`,
+          'Content-Type': `multipart/form-data; boundary=${boundary}`,
+          'Content-Length': payloadBuf.length
+        }
+      }, (res) => {
+        let respData = '';
+        res.on('data', c => respData += c);
+        res.on('end', () => console.log(`✅ Direct MP4 Upload Response:`, respData));
+      });
+      reqUpload.on('error', e => console.error(`❌ Slack upload error: ${e.message}`));
+      reqUpload.write(payloadBuf);
+      reqUpload.end();
+    } catch (e) {
+      console.error(`❌ Failed file upload: ${e.message}`);
+    }
+  }
+
+  // 4. Send Webhook Notification Payload
   if (!webhookUrl) {
     console.log(`⚠️ SLACK_WEBHOOK_URL environment variable is not set.`);
     console.log(`ℹ️ Showing preview of formatted Slack notification below:\n`);
     console.log(JSON.stringify(slackPayload, null, 2));
-    console.log(`\n👉 To post directly to Slack, add SLACK_WEBHOOK_URL to your GitHub Repo Secrets or environment.`);
     return;
   }
 
