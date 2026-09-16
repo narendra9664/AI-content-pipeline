@@ -124,16 +124,21 @@ jobs:
           echo "📋 Found $SHOT_COUNT shot(s) in manifest"
 
           if [ "$SHOT_COUNT" -gt 0 ]; then
-            # Render the first available shot (or a specific one for this week)
-            # Using scale=1 to keep render time reasonable in CI
-            node scripts/render-all.mjs --scale=1
+            # Render the primary shot (Ai1Door for Week 1) with scale=1 for CI efficiency
+            echo "🎬 Attempting Remotion render for Ai1Door..."
+            node scripts/render-all.mjs Ai1Door --scale=1 || echo "⚠️ Remotion render exited with notice"
 
-            echo "RENDER_OK=true" >> $GITHUB_OUTPUT
-            echo "✅ Remotion render complete"
-            ls -la out/ || true
+            if ls out/*.mp4 1> /dev/null 2>&1; then
+              echo "RENDER_OK=true" >> $GITHUB_OUTPUT
+              echo "✅ Remotion render complete"
+              ls -la out/ || true
+            else
+              echo "RENDER_OK=false" >> $GITHUB_OUTPUT
+              echo "⚠️ Remotion render did not produce MP4, using fallback compositor"
+            fi
           else
             echo "RENDER_OK=false" >> $GITHUB_OUTPUT
-            echo "⚠️ No shots found in manifest — nothing to render"
+            echo "⚠️ No shots found in manifest — using fallback compositor"
           fi
 
           cd ../..
