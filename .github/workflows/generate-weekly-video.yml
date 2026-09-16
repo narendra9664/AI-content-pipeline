@@ -19,6 +19,7 @@ jobs:
   generate-and-send:
     runs-on: ubuntu-latest
     name: Generate Video & Send to Slack
+    timeout-minutes: 30
 
     steps:
       - name: 📥 Checkout Repository
@@ -41,36 +42,204 @@ jobs:
 
       - name: 📦 Install Node & Python Dependencies
         run: |
+          # Root project deps
           npm install
+
+          # Remotion project deps (the video rendering engine)
+          cd claude-faceless-shorts-creator/remotion
+          npm install
+          cd ../..
+
+          # Python TTS engine (free voice generation)
           pip install edge-tts
 
       - name: 📝 Generate Weekly Script & Brief
         id: brief
         run: |
           WEEK_NUM="${{ github.event.inputs.week || '1' }}"
+          echo "WEEK_NUM=$WEEK_NUM" >> $GITHUB_OUTPUT
           node scripts/generate-weekly-brief.js --week "$WEEK_NUM"
 
+      # ─────────────────────────────────────────────────────
+      #  VOICE GENERATION — creates the AI voiceover track
+      # ─────────────────────────────────────────────────────
       - name: 🎙️ Generate Free AI Voiceover (Edge-TTS)
+        id: voice
         run: |
-          WEEK_NUM="${{ github.event.inputs.week || '1' }}"
-          node scripts/generate-free-voice.js --out "output/week-${WEEK_NUM}-voice.mp3"
+          WEEK_NUM="${{ steps.brief.outputs.WEEK_NUM }}"
 
-      - name: 🎬 Render Remotion Motion Graphic Video
-        run: |
-          WEEK_NUM="${{ github.event.inputs.week || '1' }}"
-          echo "Rendering video for Week $WEEK_NUM..."
-          
-          # Fallback check for output directory
-          mkdir -p output
-          if [ ! -f "output/week-${WEEK_NUM}-reel.mp4" ]; then
-            echo "Creating video placeholder for notification test..."
-            cp "output/week-${WEEK_NUM}-voice.mp3" "output/week-${WEEK_NUM}-reel.mp4" || touch "output/week-${WEEK_NUM}-reel.mp4"
+          # Extract the hook text from topics.json to use as voiceover
+          # (In production, you'd generate a full script; for now, use the 6-beat script)
+          VOICE_TEXT=$(node -e "
+            const topics = require('./calendar/topics.json');
+            const t = topics.find(t => t.week === parseInt('${WEEK_NUM}'));
+            if (t) {
+              const script = [
+                t.beat_1_hook,
+                t.beat_2_setup,
+                t.beat_3_quiz,
+                t.beat_4_reveal,
+                t.beat_5_twist,
+                t.beat_6_loop
+              ].join('. ');
+              process.stdout.write(script);
+            }
+          ")
+
+          VOICE_FILE="output/week-${WEEK_NUM}-voice.mp3"
+
+          node scripts/generate-free-voice.js \
+            --text "$VOICE_TEXT" \
+            --out "$VOICE_FILE" \
+            --voice "en-US-ChristopherNeural"
+
+          # Check if voice generation succeeded
+          if [ -f "$VOICE_FILE" ] && [ $(stat -c%s "$VOICE_FILE") -gt 1000 ]; then
+            echo "VOICE_OK=true" >> $GITHUB_OUTPUT
+            echo "✅ Voice file generated: $(du -h $VOICE_FILE | cut -f1)"
+          else
+            echo "VOICE_OK=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Voice generation failed — video will be silent"
           fi
+          echo "VOICE_FILE=$VOICE_FILE" >> $GITHUB_OUTPUT
+
+      # ─────────────────────────────────────────────────────
+      #  VIDEO RENDERING — Remotion renders the motion graphics
+      # ─────────────────────────────────────────────────────
+      - name: 🎬 Render Remotion Motion Graphic Video
+        id: render
+        run: |
+          WEEK_NUM="${{ steps.brief.outputs.WEEK_NUM }}"
+          RENDER_DIR="claude-faceless-shorts-creator/remotion"
+
+          echo "🎬 Rendering video for Week $WEEK_NUM..."
+
+          cd "$RENDER_DIR"
+
+          # Generate the registry (discovers all shot components)
+          node scripts/gen-registry.mjs
+
+          # Check if any shots exist to render
+          SHOT_COUNT=$(node -e "const m = require('./src/shots.manifest.json'); console.log(m.length)")
+          echo "📋 Found $SHOT_COUNT shot(s) in manifest"
+
+          if [ "$SHOT_COUNT" -gt 0 ]; then
+            # Render the first available shot (or a specific one for this week)
+            # Using scale=1 to keep render time reasonable in CI
+            node scripts/render-all.mjs --scale=1
+
+            echo "RENDER_OK=true" >> $GITHUB_OUTPUT
+            echo "✅ Remotion render complete"
+            ls -la out/ || true
+          else
+            echo "RENDER_OK=false" >> $GITHUB_OUTPUT
+            echo "⚠️ No shots found in manifest — nothing to render"
+          fi
+
+          cd ../..
+
+      # ─────────────────────────────────────────────────────
+      #  COMPOSITION — FFmpeg combines video + voice into final reel
+      # ─────────────────────────────────────────────────────
+      - name: 🎞️ Compose Final Reel (FFmpeg)
+        id: compose
+        run: |
+          WEEK_NUM="${{ steps.brief.outputs.WEEK_NUM }}"
+          VOICE_OK="${{ steps.voice.outputs.VOICE_OK }}"
+          RENDER_OK="${{ steps.render.outputs.RENDER_OK }}"
+          VOICE_FILE="${{ steps.voice.outputs.VOICE_FILE }}"
+          OUTPUT_FILE="output/week-${WEEK_NUM}-reel.mp4"
+          RENDER_DIR="claude-faceless-shorts-creator/remotion/out"
+
+          mkdir -p output
+
+          if [ "$RENDER_OK" = "true" ]; then
+            # Find the first rendered MP4 from Remotion output
+            RENDERED_VIDEO=$(ls -1 "$RENDER_DIR"/*.mp4 2>/dev/null | head -1)
+
+            if [ -n "$RENDERED_VIDEO" ] && [ -f "$RENDERED_VIDEO" ]; then
+              echo "📹 Found rendered video: $RENDERED_VIDEO"
+
+              if [ "$VOICE_OK" = "true" ] && [ -f "$VOICE_FILE" ]; then
+                # Combine rendered video + voiceover audio
+                echo "🔊 Compositing video + voiceover..."
+                ffmpeg -y \
+                  -i "$RENDERED_VIDEO" \
+                  -i "$VOICE_FILE" \
+                  -c:v copy \
+                  -c:a aac -b:a 192k \
+                  -map 0:v:0 -map 1:a:0 \
+                  -shortest \
+                  "$OUTPUT_FILE"
+                echo "✅ Final reel with voiceover: $OUTPUT_FILE"
+              else
+                # No voice — copy video as-is
+                echo "🔇 No voiceover available — using video only..."
+                cp "$RENDERED_VIDEO" "$OUTPUT_FILE"
+                echo "✅ Final reel (silent): $OUTPUT_FILE"
+              fi
+            else
+              echo "⚠️ No MP4 found in Remotion output. Checking for .mov files..."
+              RENDERED_MOV=$(ls -1 "$RENDER_DIR"/*.mov 2>/dev/null | head -1)
+
+              if [ -n "$RENDERED_MOV" ] && [ -f "$RENDERED_MOV" ]; then
+                echo "📹 Found .mov file, converting to MP4..."
+                ffmpeg -y -i "$RENDERED_MOV" -c:v libx264 -crf 18 -c:a aac "$OUTPUT_FILE"
+              fi
+            fi
+          fi
+
+          # ── Fallback: Create a branded title-card video if rendering failed ──
+          if [ ! -f "$OUTPUT_FILE" ] || [ $(stat -c%s "$OUTPUT_FILE" 2>/dev/null || echo 0) -lt 10000 ]; then
+            echo "🔧 Creating fallback branded title card video..."
+
+            # Load topic data for the title card
+            HOOK=$(node -e "
+              const t = require('./calendar/topics.json').find(t => t.week === parseInt('${WEEK_NUM}'));
+              process.stdout.write(t ? t.hook : 'Weekly AI Insight');
+            ")
+            TOPIC=$(node -e "
+              const t = require('./calendar/topics.json').find(t => t.week === parseInt('${WEEK_NUM}'));
+              process.stdout.write(t ? t.topic : 'This Week');
+            ")
+
+            # Create a 40-second branded video with text overlay
+            # Dark background with the hook text — better than nothing!
+            if [ "$VOICE_OK" = "true" ] && [ -f "$VOICE_FILE" ]; then
+              VOICE_DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$VOICE_FILE" 2>/dev/null || echo "40")
+              ffmpeg -y \
+                -f lavfi -i "color=c=0x0A0A0F:s=1080x1920:d=${VOICE_DURATION}" \
+                -i "$VOICE_FILE" \
+                -vf "drawtext=text='${HOOK}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf,drawtext=text='frontdesk AI — Week ${WEEK_NUM}':fontcolor=0x00A3FF:fontsize=32:x=(w-text_w)/2:y=h-120:fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf" \
+                -c:v libx264 -crf 23 -pix_fmt yuv420p \
+                -c:a aac -b:a 192k \
+                -shortest \
+                "$OUTPUT_FILE"
+            else
+              ffmpeg -y \
+                -f lavfi -i "color=c=0x0A0A0F:s=1080x1920:d=40" \
+                -vf "drawtext=text='${HOOK}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf,drawtext=text='frontdesk AI — Week ${WEEK_NUM}':fontcolor=0x00A3FF:fontsize=32:x=(w-text_w)/2:y=h-120:fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf" \
+                -c:v libx264 -crf 23 -pix_fmt yuv420p \
+                -t 40 \
+                "$OUTPUT_FILE"
+            fi
+            echo "✅ Fallback title card created: $OUTPUT_FILE"
+          fi
+
+          # Final validation
+          if [ -f "$OUTPUT_FILE" ] && [ $(stat -c%s "$OUTPUT_FILE") -gt 10000 ]; then
+            echo "VIDEO_OK=true" >> $GITHUB_OUTPUT
+            echo "📦 Final reel size: $(du -h $OUTPUT_FILE | cut -f1)"
+          else
+            echo "VIDEO_OK=false" >> $GITHUB_OUTPUT
+            echo "❌ Failed to produce a valid video file"
+          fi
+          echo "OUTPUT_FILE=$OUTPUT_FILE" >> $GITHUB_OUTPUT
 
       - name: 📤 Upload Video Artifact to GitHub
         uses: actions/upload-artifact@v4
         with:
-          name: frontdesk-ai-week-${{ github.event.inputs.week || '1' }}-reel
+          name: frontdesk-ai-week-${{ steps.brief.outputs.WEEK_NUM }}-reel
           path: output/*.mp4
           retention-days: 14
 
@@ -78,6 +247,8 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         run: |
-          WEEK_NUM="${{ github.event.inputs.week || '1' }}"
-          node scripts/send-to-slack.js --week "$WEEK_NUM" --video "output/week-${WEEK_NUM}-reel.mp4"
+          WEEK_NUM="${{ steps.brief.outputs.WEEK_NUM }}"
+          OUTPUT_FILE="${{ steps.compose.outputs.OUTPUT_FILE }}"
+          node scripts/send-to-slack.js --week "$WEEK_NUM" --video "$OUTPUT_FILE"

@@ -60,7 +60,18 @@ function sendToSlack(options = {}) {
   console.log(`📅 Week: ${topic.week} - ${topic.title}`);
   console.log(`==================================================\n`);
 
-  // 2. Build Slack Block Kit Message
+  // 2. Validate video file (check if real video, not a placeholder)
+  const videoSize = fs.existsSync(videoFile) ? fs.statSync(videoFile).size : 0;
+  const videoIsValid = videoSize > 10000; // Real videos are at least 10KB
+
+  if (!videoIsValid) {
+    console.log(`⚠️  Video file is missing or too small (${videoSize} bytes) — skipping file upload.`);
+    if (videoSize > 0 && videoSize < 1000) {
+      console.log(`⚠️  This looks like a placeholder file, not a real video.`);
+    }
+  }
+
+  // 3. Build Slack Block Kit Message
   const slackPayload = {
     text: `🎬 *New Weekly Reel Ready:* ${topic.title} (Week ${topic.week})`,
     blocks: [
@@ -115,7 +126,9 @@ function sendToSlack(options = {}) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `📹 *Video File:* \`${videoFile}\`\n\n*Status:* Ready for review & publishing on Instagram Reels / LinkedIn!`
+          text: videoIsValid
+            ? `📹 *Video:* \`${videoFile}\` (${(videoSize / 1024 / 1024).toFixed(1)} MB)\n\n*Status:* ✅ Ready for review & publishing on Instagram Reels / LinkedIn!`
+            : `⚠️ *Video:* Render did not produce a valid file.\n\n*Status:* ❌ Check the GitHub Actions logs for render errors.`
         }
       },
       {
@@ -130,9 +143,10 @@ function sendToSlack(options = {}) {
     ]
   };
 
+
   // 3. Optional Direct Bot Token Upload if SLACK_BOT_TOKEN is present
-  if (botToken && fs.existsSync(videoFile)) {
-    console.log(`📡 Uploading MP4 file directly via Slack Bot Token using modern Slack API...`);
+  if (botToken && videoIsValid) {
+    console.log(`📡 Uploading MP4 file (${(videoSize / 1024 / 1024).toFixed(1)} MB) via Slack Bot Token...`);
     try {
       const fileBuffer = fs.readFileSync(videoFile);
       const filename = path.basename(videoFile);
@@ -210,6 +224,10 @@ function sendToSlack(options = {}) {
     } catch (e) {
       console.error(`❌ Failed file upload: ${e.message}`);
     }
+  } else if (!botToken && videoIsValid) {
+    console.log(`\n⚠️  SLACK_BOT_TOKEN is not set — cannot upload the video file directly.`);
+    console.log(`   The video was rendered successfully but can only be downloaded from GitHub Actions artifacts.`);
+    console.log(`   To enable direct Slack uploads, add SLACK_BOT_TOKEN and SLACK_CHANNEL_ID to your GitHub Secrets.`);
   }
 
   // 4. Send Webhook Notification Payload
