@@ -3,6 +3,9 @@ import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {BODY, CLAMP, Theme} from '../theme';
 import {Sentence, VOData, f, sentences} from '../vo';
 
+// Covers render a video frame without its spoken text (headline/captions).
+export const HideSpoken = React.createContext(false);
+
 // Markup: *accent*  _accent2_  ~bad~  ^muted^
 type Mode = 'n' | 'a' | 'b' | 'r' | 'm';
 const MARKS: Record<string, Mode> = {'*': 'a', _: 'b', '~': 'r', '^': 'm'};
@@ -110,12 +113,13 @@ export const SpokenHeadline: React.FC<{
 }> = ({theme, vo, size, emph = [], emph2 = [], y, width, hideAfter, display = true, italicAccent, skip = [], splitComma}) => {
   const frame = useCurrentFrame();
   const {fps, width: W} = useVideoConfig();
+  const hidden = React.useContext(HideSpoken);
   const list = sentences(vo, splitComma);
   const idx = list.findIndex((s, i) => {
     const next = list[i + 1];
     return frame >= f(s.s) - 3 && (!next || frame < f(next.s) - 3);
   });
-  if (idx < 0 || skip.includes(idx) || (hideAfter !== undefined && frame >= hideAfter)) return null;
+  if (hidden || idx < 0 || skip.includes(idx) || (hideAfter !== undefined && frame >= hideAfter)) return null;
   const s: Sentence = list[idx];
   const next = list[idx + 1];
   const exitStart = next ? f(next.s) - 7 : Infinity;
@@ -163,6 +167,7 @@ export const Captions: React.FC<{theme: Theme; vo: VOData; y: number; size?: num
   theme, vo, y, size = 40, maxWords = 6, hideAfter,
 }) => {
   const frame = useCurrentFrame();
+  const hidden = React.useContext(HideSpoken);
   const chunks: {i0: number; i1: number}[] = [];
   let i0 = 0;
   vo.words.forEach((w, i) => {
@@ -177,7 +182,7 @@ export const Captions: React.FC<{theme: Theme; vo: VOData; y: number; size?: num
     const next = chunks[k + 1];
     return t >= vo.words[c.i0].s - 0.05 && (!next || t < vo.words[next.i0].s - 0.05) && t <= vo.words[c.i1].e + 0.6;
   });
-  if (!cur || (hideAfter !== undefined && frame >= hideAfter)) return null;
+  if (hidden || !cur || (hideAfter !== undefined && frame >= hideAfter)) return null;
   const light = theme.mode === 'light';
   return (
     <div style={{position: 'absolute', left: 0, right: 0, top: y, display: 'flex', justifyContent: 'center'}}>

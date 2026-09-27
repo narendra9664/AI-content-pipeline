@@ -1,0 +1,51 @@
+1
+00:00:00,000 --> 00:00:02,900
+Every day, buyers visit your website.
+
+2
+00:00:02,990 --> 00:00:06,100
+But you only hear from the few who fill in a form.
+
+3
+00:00:06,350 --> 00:00:07,750
+Look beneath the surface,
+
+4
+00:00:07,790 --> 00:00:10,420
+and every visitor is telling you something.
+
+5
+00:00:10,820 --> 00:00:12,690
+The listings they compare.
+
+6
+00:00:12,800 --> 00:00:15,100
+The floor plans they download.
+
+7
+00:00:15,530 --> 00:00:18,270
+The nights they come back to check the price.
+
+8
+00:00:18,880 --> 00:00:22,120
+frontdesk AI captures all of it,
+
+9
+00:00:22,170 --> 00:00:24,790
+turns it into a live intent score,
+
+10
+00:00:24,830 --> 00:00:28,040
+and tells your team exactly who to call,
+
+11
+00:00:28,120 --> 00:00:29,360
+and when.
+
+12
+00:00:29,780 --> 00:00:32,370
+See what your website has been hiding.
+
+13
+00:00:32,670 --> 00:00:35,560
+DM us the word audit.

@@ -93,6 +93,11 @@ These videos sell the same idea to different audiences: what buyers do *beneath*
   - `Audio`: VO, music and SFX cues.
 - `src/series/videos/*.tsx`: one file per video.
 - `src/series/Stills.tsx`: product stills for the website.
+- `src/series/Covers.tsx` + `scripts/render-covers.mjs`: post covers and thumbnails. The cover renders a video frame with its spoken text hidden, then adds a hook title.
+- `scripts/make_srt.py`: `.srt` subtitles from the aligned voiceover (`out/series/captions/`).
+- `src/series/videos/CaseStudy.tsx`: video 11, a case-study template. Copy `case-study.example.json`, fill in **measured** client numbers, then run `npx remotion render src/index.ts CaseStudy out/series/CaseStudy-raw.mp4 --props=case-study.json`.
+
+Captions, schedule and outreach scripts for posting the series are in `output/explainer-series/POSTING-KIT.md`.
 
 ## Assets and licensing (series)
 

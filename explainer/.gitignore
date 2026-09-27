@@ -2,3 +2,5 @@ node_modules/
 out/
 # raw ElevenLabs takes (re-downloadable from the flow; only the aligned copies are needed to render)
 public/series/vo/*-raw.mp3
+# your filled-in client data stays local
+case-study.json

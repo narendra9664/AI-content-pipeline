@@ -1,0 +1,11 @@
+{
+  "client": "A luxury developer in [City]",
+  "headline": "Every buyer answered *in seconds.*",
+  "period": "First 60 days",
+  "metrics": [
+    {"label": "Reply time to a new enquiry", "before": "[measured before]", "after": "[measured after]"},
+    {"label": "Viewings booked per month", "before": "[measured before]", "after": "[measured after]"}
+  ],
+  "quote": "[One sentence from their sales lead, used with permission.]",
+  "author": "[Name], Head of Sales"
+}

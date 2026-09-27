@@ -1,0 +1,43 @@
+1
+00:00:00,000 --> 00:00:01,590
+This is your website.
+
+2
+00:00:01,840 --> 00:00:02,690
+Beautiful.
+
+3
+00:00:02,730 --> 00:00:03,640
+Quiet.
+
+4
+00:00:03,760 --> 00:00:06,800
+But beneath it, every buyer is leaving clues.
+
+5
+00:00:07,050 --> 00:00:09,450
+The penthouse they opened four times.
+
+6
+00:00:09,510 --> 00:00:12,250
+The floor plan they downloaded at midnight.
+
+7
+00:00:12,470 --> 00:00:15,050
+frontdesk AI reads every signal,
+
+8
+00:00:15,090 --> 00:00:16,690
+ranks who's ready to buy,
+
+9
+00:00:16,730 --> 00:00:19,330
+and follows up before they go cold.
+
+10
+00:00:19,890 --> 00:00:22,330
+Want to see what's beneath yours?
+
+11
+00:00:23,000 --> 00:00:25,850
+DM us the word audit.

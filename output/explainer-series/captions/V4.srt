@@ -1,0 +1,35 @@
+1
+00:00:00,000 --> 00:00:01,300
+Nine PM.
+
+2
+00:00:01,350 --> 00:00:03,450
+A luxury buyer sends an inquiry.
+
+3
+00:00:03,510 --> 00:00:05,610
+Your team replies the next morning.
+
+4
+00:00:05,670 --> 00:00:08,260
+By then, she's already talking to someone else.
+
+5
+00:00:08,430 --> 00:00:11,160
+Now, the same inquiry with frontdesk AI.
+
+6
+00:00:11,200 --> 00:00:13,520
+A personal reply within seconds.
+
+7
+00:00:13,560 --> 00:00:16,340
+A viewing booked before she closes the tab.
+
+8
+00:00:16,520 --> 00:00:18,180
+Be the first to answer.
+
+9
+00:00:18,940 --> 00:00:21,490
+DM us the word audit.

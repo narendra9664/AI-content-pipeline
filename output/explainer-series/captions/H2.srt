@@ -1,0 +1,51 @@
+1
+00:00:00,000 --> 00:00:01,980
+Not every lead is equal.
+
+2
+00:00:02,130 --> 00:00:04,160
+One buyer viewed a listing once.
+
+3
+00:00:04,200 --> 00:00:06,000
+Another came back four times,
+
+4
+00:00:06,040 --> 00:00:07,450
+downloaded the floor plan,
+
+5
+00:00:07,490 --> 00:00:09,930
+and asked about payment plans.
+
+6
+00:00:10,100 --> 00:00:12,920
+frontdesk AI weighs every signal,
+
+7
+00:00:12,960 --> 00:00:15,600
+from page views to WhatsApp replies,
+
+8
+00:00:15,640 --> 00:00:18,540
+and turns it into one simple intent score.
+
+9
+00:00:18,970 --> 00:00:20,730
+Your team sees who's hot,
+
+10
+00:00:20,770 --> 00:00:24,420
+who's warming up, and who just needs nurturing.
+
+11
+00:00:24,710 --> 00:00:26,290
+So your agents spend their
+
+12
+00:00:26,330 --> 00:00:28,350
+time where the deals are.
+
+13
+00:00:28,570 --> 00:00:32,080
+DM us the word audit.

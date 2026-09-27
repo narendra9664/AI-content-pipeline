@@ -1,0 +1,67 @@
+1
+00:00:00,000 --> 00:00:02,240
+Here's how frontdesk AI turns website
+
+2
+00:00:02,280 --> 00:00:04,460
+visitors into booked viewings.
+
+3
+00:00:04,650 --> 00:00:05,370
+One.
+
+4
+00:00:05,520 --> 00:00:06,330
+Track.
+
+5
+00:00:06,540 --> 00:00:09,160
+Every visit, click and inquiry is captured.
+
+6
+00:00:09,420 --> 00:00:10,090
+Two.
+
+7
+00:00:10,430 --> 00:00:11,250
+Rank.
+
+8
+00:00:11,450 --> 00:00:13,180
+Each buyer gets an intent score,
+
+9
+00:00:13,220 --> 00:00:15,170
+so your team knows who's ready.
+
+10
+00:00:15,480 --> 00:00:16,200
+Three.
+
+11
+00:00:16,330 --> 00:00:17,310
+Follow up.
+
+12
+00:00:17,460 --> 00:00:19,920
+A personal message goes out instantly,
+
+13
+00:00:19,960 --> 00:00:22,620
+and the right agent is alerted.
+
+14
+00:00:23,010 --> 00:00:23,850
+Track.
+
+15
+00:00:23,890 --> 00:00:24,880
+Rank.
+
+16
+00:00:24,940 --> 00:00:26,200
+Follow up.
+
+17
+00:00:26,470 --> 00:00:31,090
+DM us the word audit to see it on your site.

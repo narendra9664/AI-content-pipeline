@@ -15,6 +15,8 @@ import {H3, H3_FRAMES} from './series/videos/H3';
 import {H4, H4_FRAMES} from './series/videos/H4';
 import {W1, W1_FRAMES} from './series/videos/W1';
 import {StillBeneath, StillDashboard, StillFollowUp, StillQueue} from './series/Stills';
+import {Cover, CoverProps} from './series/Covers';
+import {CASE_STUDY_DEFAULTS, CASE_STUDY_FRAMES, CaseStudy} from './series/videos/CaseStudy';
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -29,10 +31,15 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="H3" component={H3} durationInFrames={H3_FRAMES} fps={30} width={1920} height={1080} />
     <Composition id="H4" component={H4} durationInFrames={H4_FRAMES} fps={30} width={1920} height={1080} />
     <Composition id="W1" component={W1} durationInFrames={W1_FRAMES} fps={30} width={1920} height={1080} />
+    {/* video 11: case-study template, filled via --props with real client numbers */}
+    <Composition id="CaseStudy" component={CaseStudy} durationInFrames={CASE_STUDY_FRAMES} fps={30} width={1080} height={1920} defaultProps={CASE_STUDY_DEFAULTS} />
     {/* website stills */}
     <Composition id="StillBeneath" component={StillBeneath} durationInFrames={120} fps={30} width={1600} height={1000} />
     <Composition id="StillDashboard" component={StillDashboard} durationInFrames={600} fps={30} width={1600} height={1000} />
     <Composition id="StillQueue" component={StillQueue} durationInFrames={120} fps={30} width={1200} height={1000} />
     <Composition id="StillFollowUp" component={StillFollowUp} durationInFrames={120} fps={30} width={1200} height={900} />
+    {/* post covers / thumbnails (scripts/render-covers.mjs passes the props) */}
+    <Composition id="CoverV" component={Cover} durationInFrames={1} fps={30} width={1080} height={1920} defaultProps={{id: 'V1', frame: 175, title: "What's *beneath* your website?"} as CoverProps} />
+    <Composition id="CoverH" component={Cover} durationInFrames={1} fps={30} width={1920} height={1080} defaultProps={{id: 'H1', frame: 270, title: "What your website *isn't telling you*"} as CoverProps} />
   </>
 );
