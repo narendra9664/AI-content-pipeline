@@ -485,6 +485,7 @@
         <div class="audit-box rv d1">
           <form name="audit" method="POST" data-netlify="true" netlify-honeypot="company-url" action="#thanks" id="auditForm">
             <input type="hidden" name="form-name" value="audit" />
+            <input type="hidden" name="subject" data-remove-prefix value="New audit request from the frontdesk AI website" />
             <p class="hidden"><label>Leave this empty <input name="company-url" /></label></p>
             <div class="row2">
               <label>Name<input name="name" autocomplete="name" required /></label>
@@ -632,6 +633,8 @@
       const button = form.querySelector('button[type=submit]');
       button.disabled = true;
       formError.classList.add('hidden');
+      // Netlify uses this as the notification email's subject, so each request can be triaged from the inbox.
+      form.elements.subject.value = `Audit request: ${form.elements.company.value.trim()}, ${form.elements.volume.value} enquiries a month`;
       const data = new URLSearchParams(new FormData(form)).toString();
       fetch('/', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: data})
         .then((res) => {

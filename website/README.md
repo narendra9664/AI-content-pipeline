@@ -11,7 +11,8 @@ A single static page (`index.html` + `assets/`) for Netlify. It has no build ste
 
 - The form uses Netlify Forms (`data-netlify="true"`). Netlify leaves form detection off for new projects, so click **Forms → Enable form detection** once. It applies from the next deploy.
 - Submissions appear under **Forms → audit**. The page thanks the visitor only after Netlify accepts the submission. If it fails, the form stays open with a retry message and the Instagram fallback.
-- To get an email for each request, add one under **Project configuration → Notifications → Emails and webhooks → Form submission notifications**.
+- To get an email for each request, go to **Project configuration → Notifications → Form submission notifications → Add notification → Email notification**. The subject names the company and its monthly enquiry volume, and Reply goes straight to the person who asked, because the form's `email` field sets Reply-To.
+- To feed requests into another tool (a CRM, n8n, Make or a WhatsApp alert), add an **Outgoing webhook** in the same place. Netlify posts each submission there as JSON.
 
 ## Assets
 
