@@ -4,13 +4,14 @@ A single static page (`index.html` + `assets/`) for Netlify. It has no build ste
 
 ## Deploy
 
-- **Quickest:** drag this `website/` folder onto <https://app.netlify.com/drop>, or onto your existing site under **Deploys**.
-- **From Git:** set the site's base directory to `website`. Leave the build command empty and the publish directory at `.`, which `netlify.toml` already sets.
+- **Quickest:** in the Netlify project, first turn on the form (see below). Then drag this `website/` folder onto the drop box at the bottom of the project's **Deploys** page. The new version replaces the old one at the same address. If that page has no drop box, the project builds from a Git repository, so use the next option.
+- **From Git:** set the project's base directory to `website`. Leave the build command empty and the publish directory at `.`, which `netlify.toml` already sets.
 
 ## The audit form
 
-- The form uses Netlify Forms (`data-netlify="true"`). Submissions appear under **Forms → audit** in the Netlify dashboard once the site is deployed on Netlify.
-- To get an email for each request, turn on email notifications in **Site settings → Forms → Form notifications**.
+- The form uses Netlify Forms (`data-netlify="true"`). Netlify leaves form detection off for new projects, so click **Forms → Enable form detection** once. It applies from the next deploy.
+- Submissions appear under **Forms → audit**.
+- To get an email for each request, add one under **Project configuration → Notifications → Emails and webhooks → Form submission notifications**.
 
 ## Assets
 
