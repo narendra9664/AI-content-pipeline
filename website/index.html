@@ -204,6 +204,9 @@
     .fine { font-size: 13px; color: var(--dim); text-align: center; }
     .fine a { color: var(--gold); }
     .hidden { display: none; }
+    .form-error { font-size: 14px; color: #ffb4a8; background: rgba(255, 110, 90, 0.08); border: 1px solid rgba(255, 110, 90, 0.3); border-radius: 12px; padding: 12px 14px; text-align: center; }
+    .form-error a { color: var(--gold); }
+    button:disabled { opacity: 0.6; cursor: wait; }
 
     /* faq */
     .faq { max-width: 860px; margin: 56px auto 0; }
@@ -504,6 +507,7 @@
               <label>WhatsApp or phone (optional)<input name="phone" type="tel" autocomplete="tel" /></label>
             </div>
             <button class="btn btn-gold" type="submit">Request my free audit</button>
+            <p class="form-error hidden" id="formError" role="alert">That didn't go through. Please try again, or DM <b>AUDIT</b> to <a href="https://instagram.com/frontdesk.ops" target="_blank" rel="noopener">@frontdesk.ops</a>.</p>
             <p class="fine">Prefer Instagram? DM <b style="color:var(--text)">AUDIT</b> to <a href="https://instagram.com/frontdesk.ops" target="_blank" rel="noopener">@frontdesk.ops</a></p>
           </form>
           <div id="thanks" class="hidden" style="text-align:center;padding:40px 0">
@@ -619,14 +623,26 @@
       video.play().catch(() => {});
     });
 
-    // Netlify form: submit in place and show a thank-you
+    // Netlify form: submit in place. Say thank you only once Netlify has accepted the request;
+    // otherwise keep the form and offer Instagram, so a failed submission is never lost silently.
     const form = document.getElementById('auditForm');
+    const formError = document.getElementById('formError');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      const button = form.querySelector('button[type=submit]');
+      button.disabled = true;
+      formError.classList.add('hidden');
       const data = new URLSearchParams(new FormData(form)).toString();
       fetch('/', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: data})
-        .catch(() => {})
-        .finally(() => { form.classList.add('hidden'); document.getElementById('thanks').classList.remove('hidden'); });
+        .then((res) => {
+          if (!res.ok) throw new Error('Form submission failed: ' + res.status);
+          form.classList.add('hidden');
+          document.getElementById('thanks').classList.remove('hidden');
+        })
+        .catch(() => {
+          formError.classList.remove('hidden');
+          button.disabled = false;
+        });
     });
 
     document.getElementById('yr').textContent = new Date().getFullYear();
