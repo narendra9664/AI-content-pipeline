@@ -104,15 +104,16 @@ export function checkReply(raw: unknown): Reply | null {
   return {subject, body, brief};
 }
 
-export async function writeReply(input: ReplyInput, timeoutMs = 4500): Promise<ReplyResult> {
-  const t0 = Date.now();
-  const key = Netlify.env.get('GEMINI_API_KEY');
-  if (!key) return {ok: false, reason: 'GEMINI_API_KEY is not set', ms: 0};
-  const model = (Netlify.env.get('GEMINI_MODEL') || 'gemini-flash-lite-latest').replace(/^models\//, '');
-  const base = (Netlify.env.get('GEMINI_ENDPOINT') || 'https://generativelanguage.googleapis.com/v1beta').replace(/\/$/, '');
+// Tried in order within one time budget. The free tier often answers "high demand" (503) or is
+// slow, and older models get retired (404), so a second model gets whatever time is left.
+export const DEFAULT_MODELS = 'gemini-3.1-flash-lite,gemini-flash-lite-latest';
+const RETRY = new Set([404, 429, 500, 502, 503, 504]);
+
+type Attempt = {ok: true; reply: Reply} | {ok: false; reason: string; retry: boolean};
+
+async function attempt(base: string, key: string, model: string, input: ReplyInput, timeoutMs: number): Promise<Attempt> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-  const fail = (reason: string): ReplyResult => ({ok: false, reason, ms: Date.now() - t0});
   try {
     const res = await fetch(`${base}/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST',
@@ -122,7 +123,11 @@ export async function writeReply(input: ReplyInput, timeoutMs = 4500): Promise<R
     });
     if (!res.ok) {
       const detail = await res.text().catch(() => '');
-      return fail(`Gemini HTTP ${res.status} ${detail.replace(/\s+/g, ' ').slice(0, 160)}`.trim());
+      let message = detail;
+      try {
+        message = JSON.parse(detail)?.error?.message ?? detail;
+      } catch {}
+      return {ok: false, reason: `HTTP ${res.status} ${String(message).replace(/\s+/g, ' ').slice(0, 90)}`.trim(), retry: RETRY.has(res.status)};
     }
     const data: any = await res.json();
     const text = (data?.candidates?.[0]?.content?.parts ?? []).map((p: any) => p?.text ?? '').join('');
@@ -130,15 +135,39 @@ export async function writeReply(input: ReplyInput, timeoutMs = 4500): Promise<R
     try {
       parsed = JSON.parse(text);
     } catch {
-      return fail('Gemini did not return JSON');
+      return {ok: false, reason: 'did not return JSON', retry: true};
     }
     const reply = checkReply(parsed);
-    return reply ? {ok: true, reply, ms: Date.now() - t0, model} : fail('Gemini reply failed the checks');
+    return reply ? {ok: true, reply} : {ok: false, reason: 'reply failed the checks', retry: true};
   } catch (e: any) {
-    return fail(e?.name === 'AbortError' ? `Gemini took longer than ${timeoutMs / 1000} s` : `Gemini error: ${String(e?.message ?? e).slice(0, 120)}`);
+    return {ok: false, reason: e?.name === 'AbortError' ? `took longer than ${(timeoutMs / 1000).toFixed(1)} s` : `error: ${String(e?.message ?? e).slice(0, 90)}`, retry: false};
   } finally {
     clearTimeout(timer);
   }
+}
+
+export async function writeReply(input: ReplyInput, budgetMs = 5500): Promise<ReplyResult> {
+  const t0 = Date.now();
+  const key = Netlify.env.get('GEMINI_API_KEY');
+  if (!key) return {ok: false, reason: 'GEMINI_API_KEY is not set', ms: 0};
+  const models = (Netlify.env.get('GEMINI_MODEL') || DEFAULT_MODELS)
+    .split(',')
+    .map((m) => m.trim().replace(/^models\//, ''))
+    .filter(Boolean);
+  const base = (Netlify.env.get('GEMINI_ENDPOINT') || 'https://generativelanguage.googleapis.com/v1beta').replace(/\/$/, '');
+  const reasons: string[] = [];
+  for (const model of models) {
+    const left = budgetMs - (Date.now() - t0);
+    if (left < 1000) {
+      reasons.push(`${model}: no time left`);
+      break;
+    }
+    const r = await attempt(base, key, model, input, left);
+    if (r.ok) return {ok: true, reply: r.reply, ms: Date.now() - t0, model};
+    reasons.push(`${model}: ${r.reason}`);
+    if (!r.retry) break;
+  }
+  return {ok: false, reason: `Gemini unavailable (${reasons.join('; ')})`, ms: Date.now() - t0};
 }
 
 /** Used when Gemini can't be. Still personal: name, company and what they looked at most. */

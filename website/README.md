@@ -16,7 +16,7 @@ visitor taps "Show me"
                       posts batches to /api/track ────────► Netlify Blobs
 audit form submitted
   ├─ Netlify Forms    stored copy + the Netlify email alert (backup)
-  └─ /api/lead        loads the visit ─► scores it ─► Gemini writes the reply (4.5 s, checked)
+  └─ /api/lead        loads the visit ─► scores it ─► Gemini writes the reply (5.5 s, checked)
                       ─► template if Gemini fails ─► Gmail sends it ─► lead stored ─► owner brief
 /admin                dashboard: leads by score, today's visitors, statuses (ADMIN_KEY)
 cleanup (daily)       deletes old data (see Privacy)
@@ -66,7 +66,7 @@ The score is capped at 100. **Hot** is 70 or more, **Warm** is 40 to 69, **Nurtu
    | `ADMIN_KEY` | The dashboard password: long and random. |
    | `OWNER_EMAIL` | Where lead briefs go. Defaults to `GMAIL_USER`. |
    | `SITE_URL` | The site's address, used for the dashboard link in briefs. |
-   | `GEMINI_MODEL` | Optional. Defaults to `gemini-flash-lite-latest`. |
+   | `GEMINI_MODEL` | Optional. Models to try in order, comma-separated. Defaults to `gemini-3.1-flash-lite,gemini-flash-lite-latest`. |
    | `OWNER_TZ` | Optional. Time zone for times in briefs. Defaults to `Asia/Kolkata`. |
 
 3. **Forms:** form detection must be on (**Forms → Enable form detection**). The Netlify email alert, under **Forms → Submission notifications**, is a backup to the brief.
@@ -89,7 +89,7 @@ The score is capped at 100. **Hot** is 70 or more, **Warm** is 40 to 69, **Nurtu
   - a length outside the limits.
 
   The sign-off is always ours. The P.S. with the elapsed time is written by code, so it is always true.
-- **Time limit:** Netlify stops functions after 10 s. Gemini gets 4.5 s, and the brief is sent after the response.
+- **Time limit:** Netlify stops functions after 10 s. Gemini gets 5.5 s, split across two models: `gemini-3.1-flash-lite`, then `gemini-flash-lite-latest` (set `GEMINI_MODEL` to a comma-separated list to change this). The brief is sent after the response.
 - **Free tiers:**
   - Netlify's older free plan includes 125,000 function requests and 100 form submissions a month.
   - Gemini's free-tier quota changes without notice; the template covers any gap.

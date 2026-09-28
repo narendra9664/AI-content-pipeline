@@ -1,6 +1,6 @@
 // POST /api/lead: the audit form. Scores the visit, has Gemini write a personal reply, emails it
 // from the owner's Gmail, stores the lead and sends the owner a brief. Netlify stops a function
-// after 10 s, so Gemini gets 4.5 s and the brief is sent after the response.
+// after 10 s, so Gemini gets 5.5 s (two models at most) and the brief is sent after the response.
 import type {Config, Context} from '@netlify/functions';
 import {behaviours, foldEvents, scoreState, timeline} from '../../public/assets/score.js';
 import {K, bump, count, db, loadEvents} from '../lib/store.mts';

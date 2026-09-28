@@ -105,21 +105,42 @@ test('writeReply calls the model with the key and returns a checked reply', asyn
 test('writeReply fails cleanly on HTTP errors, bad output and timeouts', async () => {
   await withGemini(() => ({status: 429, json: {error: {message: 'quota'}}}), async () => {
     const r = await writeReply(input);
-    assert.ok(!r.ok && r.reason.startsWith('Gemini HTTP 429'));
+    assert.ok(!r.ok && r.reason.includes('HTTP 429 quota'), !r.ok ? r.reason : '');
   });
   await withGemini(() => answer({...good, body: 'Visit https://x.io'}), async () => {
     const r = await writeReply(input);
-    assert.ok(!r.ok && r.reason === 'Gemini reply failed the checks');
+    assert.ok(!r.ok && r.reason.includes('reply failed the checks'));
   });
   await withGemini(() => ({json: {candidates: [{content: {parts: [{text: 'not json'}]}}]}}), async () => {
     const r = await writeReply(input);
-    assert.ok(!r.ok && r.reason === 'Gemini did not return JSON');
+    assert.ok(!r.ok && r.reason.includes('did not return JSON'));
   });
-  await withGemini(() => ({...answer(good), delay: 400}), async () => {
-    const r = await writeReply(input, 100);
-    assert.ok(!r.ok && r.reason.includes('longer than 0.1 s'));
+  await withGemini(() => ({...answer(good), delay: 1500}), async () => {
+    const r = await writeReply(input, 1200);
+    assert.ok(!r.ok && r.reason.includes('took longer than 1.2 s'), !r.ok ? r.reason : '');
+    assert.ok(r.ms < 1450);
   });
   delete process.env.GEMINI_API_KEY;
   const r = await writeReply(input);
   assert.ok(!r.ok && r.reason === 'GEMINI_API_KEY is not set');
+});
+
+test('writeReply falls through to the next model on overload or retirement, not on a bad key', async () => {
+  const seen: string[] = [];
+  const byModel = (r: any) => {
+    seen.push(r.url);
+    if (r.url.includes('/first:')) return {status: 503, json: {error: {message: 'This model is currently experiencing high demand.'}}};
+    if (r.url.includes('/retired:')) return {status: 404, json: {error: {message: 'no longer available'}}};
+    if (r.url.includes('/badkey:')) return {status: 401, json: {error: {message: 'API key not valid'}}};
+    return answer(good);
+  };
+  await withGemini(byModel, async () => {
+    process.env.GEMINI_MODEL = 'first, retired, second';
+    const r = await writeReply(input);
+    assert.ok(r.ok && r.model === 'second');
+    process.env.GEMINI_MODEL = 'badkey,second';
+    const bad = await writeReply(input);
+    assert.ok(!bad.ok && bad.reason.includes('badkey: HTTP 401') && !bad.reason.includes('second'));
+  });
+  assert.deepEqual(seen.map((u) => u.split('/').pop()), ['first:generateContent', 'retired:generateContent', 'second:generateContent', 'badkey:generateContent']);
 });
