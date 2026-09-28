@@ -1,0 +1,17 @@
+{
+  "name": "frontdesk-website",
+  "private": true,
+  "type": "module",
+  "description": "frontdesk AI website with live visitor tracking, intent scoring and instant AI follow-up.",
+  "scripts": {
+    "dev": "netlify dev",
+    "test": "node --experimental-strip-types --test tests/score.test.mjs tests/guard.test.mts tests/gemini.test.mts tests/cleanup.test.mts"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.1",
+    "nodemailer": "^10.0.12"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^6.0.0"
+  }
+}

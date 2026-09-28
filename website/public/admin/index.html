@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Dashboard · frontdesk AI</title>
+  <meta name="theme-color" content="#07080C" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <style>
+    @font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url(../assets/fonts/instrument-serif-latin-400-normal.woff2) format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url(../assets/fonts/inter-latin-400-normal.woff2) format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url(../assets/fonts/inter-latin-600-normal.woff2) format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url(../assets/fonts/inter-latin-700-normal.woff2) format('woff2'); }
+    :root {
+      --bg: #07080c; --panel: #0e1118; --panel-2: #141823; --line: rgba(255, 255, 255, 0.08); --line-2: rgba(255, 255, 255, 0.14);
+      --text: #f6f4ef; --muted: #9ea3ae; --dim: #6d7380; --gold: #d9b26f; --blue: #4da8ff; --hot: #ff7a59; --nurture: #9fb3c8; --good: #4ade80;
+      --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; --serif: 'Instrument Serif', 'Times New Roman', serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+    button, select, input { font: inherit; color: inherit; }
+    a { color: var(--gold); }
+    .hidden { display: none !important; }
+    .wrap { width: min(980px, calc(100% - 28px)); margin: 0 auto; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; letter-spacing: -0.03em; }
+    .brand svg { width: 26px; height: auto; }
+    .brand b { color: var(--blue); }
+
+    /* login */
+    .login { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+    .login form { width: min(380px, 100%); padding: 32px 26px; border-radius: 24px; border: 1px solid var(--line-2); background: var(--panel); display: grid; gap: 14px; }
+    .login h1 { font: 400 38px/1 var(--serif); margin: 10px 0 0; }
+    .login p { margin: 0; color: var(--muted); font-size: 14px; }
+    input[type=password] { height: 50px; padding: 0 16px; border-radius: 14px; border: 1px solid var(--line-2); background: rgba(0, 0, 0, 0.35); outline: none; }
+    input[type=password]:focus { border-color: rgba(217, 178, 111, 0.6); }
+    .btn { height: 48px; padding: 0 20px; border-radius: 999px; border: 0; cursor: pointer; font-weight: 700; color: #17130b; background: linear-gradient(135deg, #f3d9a6, #d9b26f 45%, #b88d49); }
+    .err { color: #ffb4a8; font-size: 14px; }
+
+    /* app */
+    header { position: sticky; top: 0; z-index: 5; background: rgba(7, 8, 12, 0.9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .bar { height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .tabs { display: flex; gap: 6px; }
+    .tab { height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-2); background: none; cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+    .tab.on { color: #17130b; background: var(--gold); border-color: var(--gold); }
+    .icon { width: 36px; height: 36px; border-radius: 36px; border: 1px solid var(--line-2); background: none; cursor: pointer; color: var(--muted); display: grid; place-items: center; }
+    .icon svg { width: 16px; height: 16px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0 8px; }
+    .stat { padding: 14px 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); }
+    .stat b { display: block; font-size: 26px; line-height: 1.1; }
+    .stat span { font-size: 12px; color: var(--dim); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+    .filters { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0; }
+    .chip { height: 30px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line-2); background: none; color: var(--muted); font-size: 12.5px; font-weight: 600; cursor: pointer; }
+    .chip.on { color: var(--text); border-color: var(--gold); }
+    .list { display: grid; gap: 10px; padding-bottom: 40px; }
+    .empty { padding: 36px 20px; text-align: center; color: var(--dim); border: 1px dashed var(--line-2); border-radius: 18px; }
+
+    .card { border-radius: 18px; border: 1px solid var(--line); background: var(--panel); overflow: hidden; }
+    .card[data-tier=hot] { border-color: rgba(255, 122, 89, 0.35); }
+    .row { display: grid; grid-template-columns: 52px 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; cursor: pointer; }
+    .score { width: 52px; height: 52px; border-radius: 52px; display: grid; place-items: center; font-weight: 700; font-size: 17px; color: #17130b; background: var(--nurture); }
+    [data-tier=warm] .score, [data-tier=warm].tier { background: var(--gold); }
+    [data-tier=hot] .score, [data-tier=hot].tier { background: var(--hot); }
+    .who b { display: block; font-size: 15.5px; }
+    .who span { color: var(--muted); font-size: 13px; }
+    .side { text-align: right; font-size: 12.5px; color: var(--dim); }
+    .tier { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #17130b; background: var(--nurture); margin-bottom: 4px; }
+    .status-new { color: var(--gold); font-weight: 700; }
+    .detail { border-top: 1px solid var(--line); padding: 16px; display: grid; gap: 16px; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .act { height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-2); background: rgba(255, 255, 255, 0.03); color: var(--text); font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; cursor: pointer; }
+    .act.primary { color: #17130b; background: var(--gold); border-color: var(--gold); }
+    select { height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--panel-2); font-size: 13px; }
+    .kv { display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px; font-size: 13.5px; }
+    .kv dt { color: var(--dim); }
+    .kv dd { margin: 0; word-break: break-word; }
+    h4 { margin: 0 0 8px; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+    .pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; font-size: 13.5px; }
+    .pts b { display: inline-block; min-width: 34px; color: var(--gold); }
+    .mail { white-space: pre-wrap; font-size: 13.5px; line-height: 1.55; padding: 14px; border-radius: 14px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--line); color: #dfe1e6; }
+    .note { font-size: 12.5px; color: var(--dim); margin-top: 6px; }
+    .tl { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13.5px; }
+    .tl li { display: flex; gap: 12px; align-items: baseline; }
+    .tl time { flex: none; color: var(--dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .danger { margin-left: auto; background: none; border: 0; color: var(--dim); text-decoration: underline; font-size: 12.5px; cursor: pointer; }
+    @media (max-width: 640px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .kv { grid-template-columns: 1fr; }
+      .kv dt { margin-top: 6px; }
+      .side .when { display: none; }
+      .bar .brand span { display: none; }
+      .tl li { flex-direction: column; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared logo gradient: kept outside hidden sections, where some browsers drop it. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="297" y2="283"><stop offset="0" stop-color="#4DA8FF" /><stop offset="1" stop-color="#D9B26F" /></linearGradient></defs></svg>
+  <section class="login" id="login">
+    <form id="loginForm">
+      <div class="brand">
+        <svg viewBox="0 0 297 283" aria-hidden="true"><path d="M 28 283 V 28.25 H 155 A 113.25 113.25 0 0 1 155 254.75 H 114" fill="none" stroke="url(#g)" stroke-width="56.5" /><path d="M 56 141.5 H 150" fill="none" stroke="url(#g)" stroke-width="55" /></svg>
+        <span>frontdesk <b>AI</b></span>
+      </div>
+      <h1>Dashboard</h1>
+      <p>Enter the dashboard password (the ADMIN_KEY you set in Netlify).</p>
+      <input type="password" id="key" autocomplete="current-password" placeholder="Password" required />
+      <button class="btn" type="submit">Open dashboard</button>
+      <p class="err" id="loginErr" role="alert"></p>
+    </form>
+  </section>
+
+  <div id="app" class="hidden">
+    <header>
+      <div class="wrap bar">
+        <div class="brand"><svg viewBox="0 0 297 283" aria-hidden="true"><path d="M 28 283 V 28.25 H 155 A 113.25 113.25 0 0 1 155 254.75 H 114" fill="none" stroke="url(#g)" stroke-width="56.5" /><path d="M 56 141.5 H 150" fill="none" stroke="url(#g)" stroke-width="55" /></svg><span>frontdesk <b>AI</b></span></div>
+        <div class="tabs">
+          <button class="tab on" data-view="leads" type="button">Leads</button>
+          <button class="tab" data-view="visitors" type="button">Visitors</button>
+          <button class="icon" id="refresh" type="button" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8" /><path d="M21 3v5h-5" /></svg></button>
+          <button class="icon" id="logout" type="button" aria-label="Sign out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="m16 17 5-5-5-5" /><path d="M21 12H9" /></svg></button>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
+      <div class="stats" id="stats"></div>
+      <div id="leadsView">
+        <div class="filters" id="filters">
+          <button class="chip on" data-f="all" type="button">All</button>
+          <button class="chip" data-f="new" type="button">New</button>
+          <button class="chip" data-f="hot" type="button">Hot</button>
+          <button class="chip" data-f="replied" type="button">Replied</button>
+          <button class="chip" data-f="booked" type="button">Booked</button>
+        </div>
+        <div class="list" id="leads"></div>
+      </div>
+      <div id="visitorsView" class="hidden">
+        <p class="note" style="margin:14px 0">Everyone who opted in to the live demo in the last 24 hours, highest intent first.</p>
+        <div class="list" id="visitors"></div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const KEY = 'fd_admin_key';
+    const $ = (id) => document.getElementById(id);
+    let key = localStorage.getItem(KEY) || '';
+    let leads = [];
+    let visitors = [];
+    let filter = 'all';
+    let view = 'leads';
+
+    const h = (tag, attrs = {}, ...kids) => {
+      const n = document.createElement(tag);
+      for (const [k, v] of Object.entries(attrs)) {
+        if (v == null || v === false) continue;
+        if (k === 'class') n.className = v;
+        else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
+        else n.setAttribute(k, v);
+      }
+      for (const kid of kids.flat()) if (kid != null && kid !== false) n.append(kid instanceof Node ? kid : String(kid));
+      return n;
+    };
+    const ago = (t) => {
+      const s = (Date.now() - t) / 1000;
+      if (s < 60) return 'just now';
+      if (s < 3600) return `${Math.floor(s / 60)} min ago`;
+      if (s < 86400) return `${Math.floor(s / 3600)} h ago`;
+      return new Date(t).toLocaleDateString([], {day: 'numeric', month: 'short'});
+    };
+    const clock = (t) => new Date(t).toLocaleString([], {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'});
+    const place = (g) => [g && g.city, g && g.country].filter(Boolean).join(', ');
+    const wa = (phone) => {
+      const p = (phone || '').trim();
+      if (!p.startsWith('+') && !p.startsWith('00')) return '';
+      const d = p.replace(/\D/g, '').replace(/^00/, '');
+      return d.length >= 8 && d.length <= 15 ? `https://wa.me/${d}` : '';
+    };
+
+    async function api(path, opts = {}) {
+      const res = await fetch('/api/admin' + path, {...opts, headers: {'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json'}});
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401 || res.status === 429 || res.status === 503) throw Object.assign(new Error(data.error || 'Not allowed'), {auth: true});
+      if (!res.ok) throw new Error(data.error || 'Request failed');
+      return data;
+    }
+
+    function showLogin(msg) {
+      $('app').classList.add('hidden');
+      $('login').classList.remove('hidden');
+      $('loginErr').textContent = msg || '';
+    }
+
+    async function load() {
+      try {
+        const [l, v] = await Promise.all([api('?view=leads'), api('?view=visitors')]);
+        leads = l.leads;
+        visitors = v.visitors;
+        $('login').classList.add('hidden');
+        $('app').classList.remove('hidden');
+        render();
+      } catch (e) {
+        if (e.auth) {
+          localStorage.removeItem(KEY);
+          showLogin(e.message);
+        } else alert(e.message);
+      }
+    }
+
+    function render() {
+      const week = Date.now() - 7 * 864e5;
+      const stat = (n, label) => h('div', {class: 'stat'}, h('b', {}, n), h('span', {}, label));
+      $('stats').replaceChildren(
+        stat(leads.filter((l) => l.createdAt > week).length, 'Leads, 7 days'),
+        stat(leads.filter((l) => l.status === 'new').length, 'Waiting for you'),
+        stat(leads.filter((l) => l.status === 'booked').length, 'Booked'),
+        stat(visitors.length, 'Visitors, 24 h'),
+      );
+      $('leadsView').classList.toggle('hidden', view !== 'leads');
+      $('visitorsView').classList.toggle('hidden', view !== 'visitors');
+      document.querySelectorAll('.tab').forEach((t) => t.classList.toggle('on', t.dataset.view === view));
+      document.querySelectorAll('.chip').forEach((c) => c.classList.toggle('on', c.dataset.f === filter));
+
+      // Leads: newest first, but hot ones that still need an answer go to the top.
+      const shown = leads
+        .filter((l) => filter === 'all' || (filter === 'hot' ? l.tier === 'Hot' : l.status === filter))
+        .sort((a, b) => (b.status === 'new' && b.tier === 'Hot') - (a.status === 'new' && a.tier === 'Hot') || b.createdAt - a.createdAt);
+      $('leads').replaceChildren(...(shown.length ? shown.map(leadCard) : [h('div', {class: 'empty'}, filter === 'all' ? 'No audit requests yet. Share your site link in your outreach and they will appear here.' : 'Nothing here.')]));
+      $('visitors').replaceChildren(...(visitors.length ? visitors.map(visitorCard) : [h('div', {class: 'empty'}, 'No one has opted in to the live demo in the last 24 hours.')]));
+    }
+
+    function leadCard(l) {
+      const detail = h('div', {class: 'detail hidden'});
+      const card = h('article', {class: 'card', 'data-tier': l.tier.toLowerCase()},
+        h('div', {class: 'row', onclick: () => toggle(l, detail)},
+          h('div', {class: 'score'}, l.score),
+          h('div', {class: 'who'}, h('b', {}, l.name), h('span', {}, `${l.company} · ${l.volume} a month`)),
+          h('div', {class: 'side'}, h('span', {class: 'tier', 'data-tier': l.tier.toLowerCase()}, l.tier), h('div', {class: l.status === 'new' ? 'status-new' : ''}, l.status === 'new' ? 'New' : l.status[0].toUpperCase() + l.status.slice(1)), h('div', {class: 'when'}, ago(l.createdAt)))),
+        detail);
+      return card;
+    }
+
+    async function toggle(l, detail) {
+      if (!detail.classList.contains('hidden')) return detail.classList.add('hidden');
+      detail.classList.remove('hidden');
+      const reply = l.reply || {};
+      const phoneWa = wa(l.phone);
+      const status = h('select', {'aria-label': 'Status', onchange: (e) => setStatus(l, e.target.value)},
+        ...['new', 'replied', 'booked', 'lost'].map((s) => h('option', {value: s, selected: s === l.status ? '' : null}, s[0].toUpperCase() + s.slice(1))));
+      const tl = h('ul', {class: 'tl'}, h('li', {class: 'note'}, 'Loading…'));
+      detail.replaceChildren(
+        h('div', {class: 'actions'},
+          h('a', {class: 'act primary', href: `mailto:${l.email}?subject=${encodeURIComponent('Re: ' + (reply.subject || 'Your lead-flow audit'))}`}, 'Email'),
+          phoneWa ? h('a', {class: 'act', href: phoneWa, target: '_blank', rel: 'noopener'}, 'WhatsApp') : null,
+          l.phone ? h('a', {class: 'act', href: `tel:${l.phone.replace(/[^\d+]/g, '')}`}, 'Call') : null,
+          status,
+          h('button', {class: 'danger', type: 'button', onclick: () => remove(l)}, 'Delete')),
+        h('dl', {class: 'kv'},
+          h('dt', {}, 'Email'), h('dd', {}, l.email),
+          h('dt', {}, 'Phone / WhatsApp'), h('dd', {}, l.phone || 'not given'),
+          h('dt', {}, 'Website'), h('dd', {}, l.website || 'not given'),
+          h('dt', {}, 'Came from'), h('dd', {}, [l.source || 'unknown', place(l.geo), l.dev].filter(Boolean).join(' · ')),
+          h('dt', {}, 'Requested'), h('dd', {}, clock(l.createdAt))),
+        h('div', {}, h('h4', {}, 'Why this score'),
+          l.parts.length ? h('ul', {class: 'pts'}, ...l.parts.map((p) => h('li', {}, h('b', {}, `+${p.pts}`), p.label))) : h('p', {class: 'note'}, 'Nothing tracked: they declined the live demo, or nothing was recorded.')),
+        h('div', {}, h('h4', {}, reply.emailed ? `Reply sent in ${((reply.totalMs || 0) / 1000).toFixed(1)} s (${reply.by})` : 'Reply not sent automatically'),
+          h('div', {class: 'mail'}, `Subject: ${reply.subject || ''}\n\n${reply.body || ''}`),
+          !reply.emailed && (reply.error || reply.note) ? h('p', {class: 'note'}, `Why: ${reply.error || reply.note}`) : null,
+          reply.emailed && reply.note ? h('p', {class: 'note'}, `Gemini was not used: ${reply.note}`) : null),
+        h('div', {}, h('h4', {}, 'Brief'), h('p', {class: 'mail'}, l.brief || '')),
+        h('div', {}, h('h4', {}, 'What they did'), tl),
+      );
+      try {
+        const {timeline} = await api(`?view=lead&id=${encodeURIComponent(l.id)}`);
+        tl.replaceChildren(...(timeline.length ? timeline.map((e) => h('li', {}, h('time', {}, clock(e.t)), e.label)) : [h('li', {class: 'note'}, 'No tracked activity.')]));
+      } catch (e) {
+        tl.replaceChildren(h('li', {class: 'note'}, e.message));
+      }
+    }
+
+    function visitorCard(v) {
+      const who = v.lead ? `${v.name} · ${v.company}` : `Anonymous visitor${place(v.geo) ? ' from ' + place(v.geo) : ''}`;
+      return h('article', {class: 'card', 'data-tier': (v.tier || 'Nurture').toLowerCase()},
+        h('div', {class: 'row', style: 'cursor:default'},
+          h('div', {class: 'score'}, v.score),
+          h('div', {class: 'who'}, h('b', {}, who), h('span', {}, [v.source || 'direct', v.dev, v.visits > 1 ? `${v.visits} visits` : '1 visit'].filter(Boolean).join(' · ')), h('span', {style: 'display:block'}, v.reasons.join(' · '))),
+          h('div', {class: 'side'}, h('span', {class: 'tier', 'data-tier': (v.tier || 'Nurture').toLowerCase()}, v.tier), h('div', {}, ago(v.last)))));
+    }
+
+    async function setStatus(l, status) {
+      try {
+        await api('', {method: 'POST', body: JSON.stringify({action: 'status', id: l.id, status})});
+        l.status = status;
+        render();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function remove(l) {
+      if (!confirm(`Delete ${l.name}'s request and everything recorded about their visit? This can't be undone.`)) return;
+      try {
+        await api('', {method: 'POST', body: JSON.stringify({action: 'delete', id: l.id})});
+        leads = leads.filter((x) => x.id !== l.id);
+        render();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    $('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      key = $('key').value.trim();
+      localStorage.setItem(KEY, key);
+      load();
+    });
+    $('logout').addEventListener('click', () => {
+      localStorage.removeItem(KEY);
+      key = '';
+      showLogin();
+    });
+    $('refresh').addEventListener('click', load);
+    document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => { view = t.dataset.view; render(); }));
+    $('filters').addEventListener('click', (e) => {
+      const c = e.target.closest('.chip');
+      if (c) { filter = c.dataset.f; render(); }
+    });
+    setInterval(() => { if (key && document.visibilityState === 'visible' && !document.querySelector('.detail:not(.hidden)')) load(); }, 60000);
+    if (key) load();
+  </script>
+</body>
+</html>

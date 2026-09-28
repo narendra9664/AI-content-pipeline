@@ -1,8 +1,31 @@
-# Static site: publish this folder as-is.
+# Deployed from GitHub with base directory "website". Only public/ is served; the functions
+# are bundled from netlify/functions. No build command: the page is plain HTML.
 [build]
-  publish = "."
+  publish = "public"
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Media and fonts rarely change, so browsers keep them for a week. Scripts and HTML keep
+# Netlify's default (revalidate on every load), so tracker updates reach visitors at once.
 [[headers]]
-  for = "/assets/*"
+  for = "/assets/*.jpg"
   [headers.values]
     Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/assets/*.mp4"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
