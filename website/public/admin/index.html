@@ -83,6 +83,17 @@
     .tl li { display: flex; gap: 12px; align-items: baseline; }
     .tl time { flex: none; color: var(--dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
     .danger { margin-left: auto; background: none; border: 0; color: var(--dim); text-decoration: underline; font-size: 12.5px; cursor: pointer; }
+    .setup { margin: 18px 0 0; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); }
+    .setup.todo { border-color: rgba(217, 178, 111, 0.5); }
+    .setup-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 14px; }
+    .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; font-size: 13.5px; }
+    .checks li { display: flex; gap: 10px; align-items: baseline; }
+    .checks code { font-size: 12.5px; color: var(--text); }
+    .ok { color: var(--good); }
+    .no { color: #ff8a7a; }
+    .opt { color: var(--dim); }
+    .linkish { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: 13px; padding: 0; }
+    #testResult { margin-top: 8px; display: grid; gap: 4px; }
     @media (max-width: 640px) {
       .stats { grid-template-columns: repeat(2, 1fr); }
       .kv { grid-template-columns: 1fr; }
@@ -123,6 +134,7 @@
       </div>
     </header>
     <main class="wrap">
+      <section class="setup hidden" id="setup" aria-label="Setup"></section>
       <div class="stats" id="stats"></div>
       <div id="leadsView">
         <div class="filters" id="filters">
@@ -149,6 +161,8 @@
     let visitors = [];
     let filter = 'all';
     let view = 'leads';
+    let setupInfo = null;
+    let setupOpen = false;
 
     const h = (tag, attrs = {}, ...kids) => {
       const n = document.createElement(tag);
@@ -191,13 +205,17 @@
       $('loginErr').textContent = msg || '';
     }
 
-    async function load() {
+    async function load(withSetup = false) {
       try {
-        const [l, v] = await Promise.all([api('?view=leads'), api('?view=visitors')]);
+        const [l, v, st] = await Promise.all([api('?view=leads'), api('?view=visitors'), withSetup || !setupInfo ? api('?view=setup') : null]);
         leads = l.leads;
         visitors = v.visitors;
         $('login').classList.add('hidden');
         $('app').classList.remove('hidden');
+        if (st) {
+          setupInfo = st;
+          renderSetup();
+        }
         render();
       } catch (e) {
         if (e.auth) {
@@ -227,6 +245,49 @@
         .sort((a, b) => (b.status === 'new' && b.tier === 'Hot') - (a.status === 'new' && a.tier === 'Hot') || b.createdAt - a.createdAt);
       $('leads').replaceChildren(...(shown.length ? shown.map(leadCard) : [h('div', {class: 'empty'}, filter === 'all' ? 'No audit requests yet. Share your site link in your outreach and they will appear here.' : 'Nothing here.')]));
       $('visitors').replaceChildren(...(visitors.length ? visitors.map(visitorCard) : [h('div', {class: 'empty'}, 'No one has opted in to the live demo in the last 24 hours.')]));
+    }
+
+    // Which settings the live deploy has, and a real test of Gemini + Gmail.
+    function renderSetup() {
+      const missing = setupInfo.settings.filter((x) => !x.ok && !x.optional);
+      const card = $('setup');
+      card.classList.remove('hidden');
+      card.classList.toggle('todo', missing.length > 0);
+      const test = h('button', {class: 'act', type: 'button', onclick: runTest}, 'Send a test reply to yourself');
+      const result = h('div', {id: 'testResult', class: 'note'});
+      if (!missing.length && !setupOpen) {
+        card.replaceChildren(
+          h('div', {class: 'setup-row'}, h('span', {}, h('b', {class: 'ok'}, '✓ '), 'Setup complete'), test,
+            h('button', {class: 'linkish', type: 'button', onclick: () => { setupOpen = true; renderSetup(); }}, 'Details')),
+          result);
+        return;
+      }
+      card.replaceChildren(
+        h('h4', {}, missing.length ? 'Finish setup' : 'Setup'),
+        h('ul', {class: 'checks'}, ...setupInfo.settings.map((x) => h('li', {},
+          h('b', {class: x.ok ? 'ok' : x.optional ? 'opt' : 'no'}, x.ok ? '✓' : x.optional ? '–' : '✗'),
+          h('span', {}, h('code', {}, x.key), ` · ${x.what}${x.optional ? ' (optional)' : ''}`)))),
+        missing.length ? h('p', {class: 'note'}, 'Add the missing ones in Netlify under Project configuration → Environment variables, then go to Deploys → Trigger deploy. Functions only see settings from their latest deploy.') : null,
+        h('p', {class: 'note'}, `Gemini models, in order: ${setupInfo.models}`),
+        h('div', {class: 'actions', style: 'margin-top:10px'}, test),
+        result);
+    }
+
+    async function runTest(e) {
+      const btn = e.target;
+      btn.disabled = true;
+      btn.textContent = 'Writing and sending…';
+      const out = $('testResult');
+      try {
+        const r = await api('', {method: 'POST', body: JSON.stringify({action: 'test'})});
+        out.replaceChildren(
+          h('div', {}, r.gemini.ok ? `✓ Gemini wrote it in ${(r.gemini.ms / 1000).toFixed(1)} s (${r.gemini.model}).` : `✗ Gemini unavailable, so the template was used: ${r.gemini.reason}`),
+          h('div', {}, r.email.ok ? `✓ Sent to ${r.email.to} in ${(r.email.ms / 1000).toFixed(1)} s. Check your inbox.` : `✗ Email not sent: ${r.email.error}`));
+      } catch (err) {
+        out.textContent = err.message;
+      }
+      btn.disabled = false;
+      btn.textContent = 'Send a test reply to yourself';
     }
 
     function leadCard(l) {
@@ -319,7 +380,7 @@
       key = '';
       showLogin();
     });
-    $('refresh').addEventListener('click', load);
+    $('refresh').addEventListener('click', () => load(true));
     document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => { view = t.dataset.view; render(); }));
     $('filters').addEventListener('click', (e) => {
       const c = e.target.closest('.chip');

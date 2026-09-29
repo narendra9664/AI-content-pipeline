@@ -1,5 +1,7 @@
 # frontdesk AI website
 
+> **This folder moved.** The live site now deploys from [narendra9664/UserTracking-system](https://github.com/narendra9664/UserTracking-system), so make changes there. This is the copy it started from.
+
 The marketing site, plus a live demo of the product running on it:
 
 - **Live panel:** visitors who opt in see what the system records about them, and their intent score, as they browse.
@@ -18,7 +20,7 @@ audit form submitted
   ├─ Netlify Forms    stored copy + the Netlify email alert (backup)
   └─ /api/lead        loads the visit ─► scores it ─► Gemini writes the reply (5.5 s, checked)
                       ─► template if Gemini fails ─► Gmail sends it ─► lead stored ─► owner brief
-/admin                dashboard: leads by score, today's visitors, statuses (ADMIN_KEY)
+/admin                dashboard: leads by score, today's visitors, statuses, setup check (ADMIN_KEY)
 cleanup (daily)       deletes old data (see Privacy)
 ```
 
@@ -69,11 +71,15 @@ The score is capped at 100. **Hot** is 70 or more, **Warm** is 40 to 69, **Nurtu
    | `GEMINI_MODEL` | Optional. Models to try in order, comma-separated. Defaults to `gemini-3.1-flash-lite,gemini-flash-lite-latest`. |
    | `OWNER_TZ` | Optional. Time zone for times in briefs. Defaults to `Asia/Kolkata`. |
 
+   Functions read these settings when they are deployed. After adding or changing one, go to **Deploys → Trigger deploy**.
+
 3. **Forms:** form detection must be on (**Forms → Enable form detection**). The Netlify email alert, under **Forms → Submission notifications**, is a backup to the brief.
 4. **Test it on your phone:**
    1. Tap "Show me" and browse, then open the live panel.
    2. Submit the audit form. The reply should arrive within about 10 seconds, followed by the brief.
    3. Check that the lead appears at `/admin`.
+
+   The dashboard's **Setup** card shows which settings the live deploy has. **Send a test reply to yourself** runs Gemini and Gmail without the form or its limits.
 
 ## Safeguards
 
