@@ -101,7 +101,7 @@ async function testReply() {
     volume: '50 to 200',
     score: 72,
     tier: 'Hot',
-    behaviours: ['watched the 50-second film with the sound on', 'looked closely at the one-screen view of ranked buyers'],
+    behaviours: ['watched the 45-second film with the sound on', 'looked closely at the one-screen view of ranked buyers'],
     signals: ['Watched 50% of the film with sound (+15)', 'Read "The product" (+10)'],
   };
   const ai = await writeReply(input);

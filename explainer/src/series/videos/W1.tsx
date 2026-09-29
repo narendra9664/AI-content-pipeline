@@ -16,7 +16,8 @@ import {Soundtrack} from '../kit/Audio';
 
 const T = THEMES.brand;
 const V = vo as VOData;
-export const W1_FRAMES = Math.ceil(V.duration * 30) + 60;
+// The voiceover plus 3 s on the end card: 45 s with the current voice, as the website's button says.
+export const W1_FRAMES = Math.ceil(V.duration * 30) + 90;
 const w = (word: string, n = 1) => at(V, word, n);
 const SERIF = T.display;
 

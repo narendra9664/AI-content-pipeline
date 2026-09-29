@@ -95,7 +95,7 @@ test('behaviours mention content only, most-read first', () => {
     ev('faq', {label: 'Will the follow-ups sound automated?'}),
   ], NOW);
   const b = behaviours(state);
-  assert.equal(b[0], 'watched the 50-second film with the sound on');
+  assert.equal(b[0], 'watched the 45-second film with the sound on');
   assert.equal(b[1], 'looked closely at the one-screen view of ranked buyers');
   assert.equal(b[2], 'read what changes when a sales team can see buyer intent');
   assert.ok(b.includes('opened the FAQ question "Will the follow-ups sound automated?"'));

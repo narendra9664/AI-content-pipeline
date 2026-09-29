@@ -66,7 +66,7 @@ These videos sell the same idea to different audiences: what buyers do *beneath*
 
 ## Pipeline
 
-1. **Voiceover:** ElevenLabs, voice "Bryan", `eleven_multilingual_v2`. Save it to `public/series/vo/<id>-raw.mp3`.
+1. **Voiceover:** ElevenLabs, `eleven_multilingual_v2`. The social videos use the voice "Bryan" (sped up 10%, 8% for W1 originally). The website film W1 uses "Harper - Confident, Clear and Cool" (`c1uwEpPUcC16tq1udqxk`) at natural speed (tempo 1.0). Save it to `public/series/vo/<id>-raw.mp3`.
 2. **Align:** `FFMPEG=… python3 scripts/align_vo.py <id> 1.1 "<script>"`.
    - Speeds the voice up with `atempo` and writes `public/series/vo/<id>.mp3`.
    - Force-aligns every word with pocketsphinx and writes `src/series/vo/<id>.json`.

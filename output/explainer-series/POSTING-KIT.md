@@ -28,7 +28,7 @@ Lead with the strongest hooks. LinkedIn gets the 16:9 videos, Instagram the 9:16
 | Week 2 Wed | **V5** Track. Rank. Follow up. | |
 | Week 2 Thu | | **H3** Follow-up that feels personal |
 
-- **W1**, the 50-second film, is the website hero. Also pin it to your LinkedIn profile's *Featured* section, and upload it to YouTube if you use it.
+- **W1**, the 45-second film, is the website hero. Also pin it to your LinkedIn profile's *Featured* section, and upload it to YouTube if you use it.
 - **Times:** start with 7 to 9 PM local on Instagram and 8 to 10 AM on LinkedIn, Tuesday to Thursday. Treat these as a first guess and move them after a week of data.
 - **Cross-posting:** LinkedIn plays vertical video well. From week 3, re-post V1, V4 and V2 there.
 - **Calls to action:** all 10 videos end with the direct one (*DM us "AUDIT"*). Your brand rules ask for three soft calls to action for every direct one. So the captions below carry soft ones: save, share or a question. That balances the grid without re-rendering anything.
@@ -245,7 +245,7 @@ What's on your team's screen at 9 AM on Monday?
 
 ### W1 · Website film (LinkedIn Featured / YouTube)
 
-- Length: 50s
+- Length: 45s
 - Thumbnail: `covers/W1-cover.jpg`
 - Subtitles: `captions/W1.srt`
 

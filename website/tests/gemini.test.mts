@@ -12,7 +12,7 @@ const input: ReplyInput = {
   volume: '50 to 200',
   score: 58,
   tier: 'Warm',
-  behaviours: ['looked closely at the one-screen view of ranked buyers', 'watched the 50-second film with the sound on'],
+  behaviours: ['looked closely at the one-screen view of ranked buyers', 'watched the 45-second film with the sound on'],
   signals: ['Read "The product" (+10)', 'Came back for a second visit (+10)'],
 };
 

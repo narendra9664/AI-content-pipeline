@@ -155,7 +155,7 @@ export function behaviours(s) {
     .sort((a, b) => b[1] - a[1])
     .map(([key]) => about[key]);
   const out = [];
-  if (s.video >= 50) out.push('watched the 50-second film with the sound on');
+  if (s.video >= 50) out.push('watched the 45-second film with the sound on');
   out.push(...read);
   for (const q of s.faqs.slice(0, 2)) out.push(`opened the FAQ question "${q}"`);
   return out.slice(0, 5);
