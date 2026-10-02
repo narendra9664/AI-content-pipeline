@@ -32,7 +32,7 @@ def cues(words):
             clauses.append(cur)
             cur = []
         cur.append(w)
-        if w["w"][-1] in ".?!,":
+        if w["w"].rstrip("\"'”’")[-1:] in tuple(".?!,"):
             clauses.append(cur)
             cur = []
     if cur:
@@ -41,7 +41,7 @@ def cues(words):
     merged = []
     for c in clauses:
         prev = merged[-1] if merged else None
-        if prev and prev[-1]["w"][-1] == "," and len(text(prev)) < 18 and len(text(prev + c)) <= MAX + 8:
+        if prev and prev[-1]["w"].rstrip("\"'”’")[-1:] == "," and len(text(prev)) < 18 and len(text(prev + c)) <= MAX + 8:
             merged[-1] = prev + c
         else:
             merged.append(c)

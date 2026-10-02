@@ -13,6 +13,16 @@ import {H2} from './videos/H2';
 import {H3} from './videos/H3';
 import {H4} from './videos/H4';
 import {W1} from './videos/W1';
+import {IG01} from './videos/IG01';
+import {IG02} from './videos/IG02';
+import {IG03} from './videos/IG03';
+import {IG04} from './videos/IG04';
+import {IG05} from './videos/IG05';
+import {IG06} from './videos/IG06';
+import {IG07} from './videos/IG07';
+import {IG08} from './videos/IG08';
+import {IG09} from './videos/IG09';
+import {IG10} from './videos/IG10';
 
 // Post covers / thumbnails: a frame from the video itself, with a big hook title laid over a
 // scrim that hides the burned-in headline. Rendered by scripts/render-covers.mjs.
@@ -29,7 +39,19 @@ export const VIDEOS: Record<string, {C: React.FC; theme: Theme}> = {
   H3: {C: H3, theme: THEMES.sand},
   H4: {C: H4, theme: THEMES.aurora},
   W1: {C: W1, theme: THEMES.brand},
+  IG01: {C: IG01, theme: THEMES.lilac},
+  IG02: {C: IG02, theme: THEMES.midnight},
+  IG03: {C: IG03, theme: THEMES.sand},
+  IG04: {C: IG04, theme: THEMES.emerald},
+  IG05: {C: IG05, theme: THEMES.coral},
+  IG06: {C: IG06, theme: THEMES.volt},
+  IG07: {C: IG07, theme: THEMES.ivory},
+  IG08: {C: IG08, theme: THEMES.teal},
+  IG09: {C: IG09, theme: THEMES.aurora},
+  IG10: {C: IG10, theme: THEMES.brand},
 };
+
+const SIDE_FADE = 'linear-gradient(90deg, transparent 0%, black 9%, black 91%, transparent 100%)';
 
 export type CoverProps = {id: string; frame: number; title: string; x?: number; y?: number; scale?: number};
 
@@ -66,7 +88,13 @@ export const Cover: React.FC<CoverProps> = ({id, frame, title, x, y, scale}) => 
   const vs = scale ?? (vertical ? 0.84 : 0.8);
   return (
     <AbsoluteFill style={{background: bg, overflow: 'hidden'}}>
-      <div style={{position: 'absolute', inset: 0, transformOrigin: vertical ? '50% 0' : '100% 50%', transform: `translate(${vx}px, ${vy}px) scale(${vs})`}}>
+      <div
+        style={{
+          position: 'absolute', inset: 0, transformOrigin: vertical ? '50% 0' : '100% 50%', transform: `translate(${vx}px, ${vy}px) scale(${vs})`,
+          // a scaled-down vertical frame leaves side edges; fade them into the cover background
+          ...(vertical && vs < 1 ? {WebkitMaskImage: SIDE_FADE, maskImage: SIDE_FADE} : {}),
+        }}
+      >
         <HideSpoken.Provider value>
           <Sequence from={-frame} layout="none">
             <C />

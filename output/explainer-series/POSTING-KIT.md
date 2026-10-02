@@ -49,7 +49,7 @@ Lead with the strongest hooks. LinkedIn gets the 16:9 videos, Instagram the 9:16
 
 ## Instagram captions (9:16)
 
-Hashtags: the five brand tags, plus five rotating ones. The brand rules allow at most three emojis; these use none, which reads as more premium.
+Hashtags: the five brand tags. Instagram now allows at most five per post or Reel. The brand rules allow at most three emojis; these use none, which reads as more premium.
 
 ### V1 · What's beneath your website?
 
@@ -66,7 +66,7 @@ The developers who sell out launches don't wait for enquiries. They see intent w
 Save this for your next sales meeting.
 How many people looked at your best unit this week without enquiring?
 
-#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology #proptech #leadgeneration #realestatemarketing #luxuryhomes #salesautomation
+#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology
 ```
 
 ### V2 · The 11:48 PM buyer
@@ -84,7 +84,7 @@ The developers winning right now answer while the buyer is still on the page.
 Share this with your sales director.
 What time did your last serious enquiry arrive?
 
-#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology #closingdeals #salesautomation #realestateagent #proptech #leadgeneration
+#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology
 ```
 
 ### V3 · 50 leads. 10 calls. Who first?
@@ -102,7 +102,7 @@ Top sales teams don't work harder on more leads. They work first on the right on
 Save this if your team works through a lead list every morning.
 How does your team decide who gets the first call?
 
-#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology #leadgeneration #salesautomation #realestateagent #developmentlife #aiinbusiness
+#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology
 ```
 
 ### V4 · The reply that came too late
@@ -120,7 +120,7 @@ The developers who win aren't always the biggest. They're the first to answer, p
 Send this to whoever handles your enquiries.
 How long does a 9 PM enquiry wait at your company?
 
-#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology #closingdeals #realestatemarketing #luxuryhomes #proptech #salesautomation
+#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology
 ```
 
 ### V5 · Track. Rank. Follow up.
@@ -140,7 +140,7 @@ Built for developers who'd rather call three ready buyers than thirty cold ones.
 Save this as the playbook.
 Which of the three steps is weakest in your team today?
 
-#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology #proptech #aiinbusiness #leadgeneration #developmentlife #realestatemarketing
+#luxuryrealestate #realestateleads #aiautomation #propertydevelopment #realestatetechnology
 ```
 
 ---

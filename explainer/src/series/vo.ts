@@ -27,7 +27,8 @@ export type Sentence = {i0: number; i1: number; s: number; e: number};
 export const sentences = (vo: VOData, comma = false): Sentence[] => {
   const out: Sentence[] = [];
   let i0 = 0;
-  const end = comma ? /[.?!,]$/ : /[.?!]$/;
+  // a closing quote after the punctuation still ends the sentence: for?”
+  const end = comma ? /[.?!,]['"”’]?$/ : /[.?!]['"”’]?$/;
   vo.words.forEach((w, i) => {
     if (end.test(w.w) || i === vo.words.length - 1) {
       out.push({i0, i1: i, s: vo.words[i0].s, e: w.e});

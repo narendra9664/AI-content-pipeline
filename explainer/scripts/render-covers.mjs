@@ -17,6 +17,17 @@ const COVERS = [
   ['H3', 'CoverH', 452, 'Follow-up that feels *personal.*', {scale: 0.6, x: 20}],
   ['H4', 'CoverH', 420, 'Monday, 9 AM. *One screen.*'],
   ['W1', 'CoverH', 560, 'Know which buyers are *ready.*'],
+  // silent Instagram series
+  ['IG01', 'CoverV', 360, 'Which lead *buys first?*', {y: 420, scale: 0.84}],
+  ['IG02', 'CoverV', 520, '14 days. | *Zero* form fills.', {y: 330, scale: 0.86}],
+  ['IG03', 'CoverV', 522, '3 signs a buyer | is *ready*', {y: 360, scale: 0.84}],
+  ['IG04', 'CoverV', 500, 'Which one | *are you?*', {y: 360, scale: 0.84}],
+  ['IG05', 'CoverV', 300, 'Your follow-up | is *leaking*', {y: 330, scale: 0.86}],
+  ['IG06', 'CoverV', 510, 'The first | *60 seconds*', {y: 400, scale: 0.84}],
+  ['IG07', 'CoverV', 520, 'The reply that | *books viewings*', {y: 330, scale: 0.84}],
+  ['IG08', 'CoverV', 600, 'Never open | a call *blind*', {y: 300, scale: 0.84}],
+  ['IG09', 'CoverV', 360, 'Take the | *8 PM test*', {y: 380, scale: 0.84}],
+  ['IG10', 'CoverV', 260, 'Their 9 PM is | your *3 AM*', {y: 300, scale: 0.84}],
 ];
 
 const only = process.argv.slice(2);

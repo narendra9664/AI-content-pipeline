@@ -17,7 +17,12 @@ timed against. Tune --wpm per script if a cut needs to land faster or slower.
 No audio file is produced or needed: a video built on synthetic timing must omit the `vo` prop
 on <Soundtrack> (it's optional — music/SFX only), so nothing tries to load a non-existent mp3.
 
-usage: python3 scripts/synth_vo.py <id> "<script text>" [--wpm 145]
+Silent videos have to be read, not heard, so two extra controls exist:
+  --pause 1.4    scales every punctuation pause (more time to finish reading a line)
+  [+1.5]         a standalone token in the script that holds for 1.5s before the next word
+                 (e.g. a quiz countdown); it is not shown on screen or stored as a word
+
+usage: python3 scripts/synth_vo.py <id> "<script text>" [--wpm 145] [--pause 1.4]
 """
 import argparse
 import json
@@ -29,6 +34,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Seconds of pause added after a word ending in this punctuation, before the next word starts.
 PAUSE = {'.': 0.42, '?': 0.42, '!': 0.42, ',': 0.18, ';': 0.3, ':': 0.3}
 LEAD_IN = 0.15  # silence before the first word, matching the ~0.1-0.2s every real VO has
+HOLD = re.compile(r'^\[\+(\d+(?:\.\d+)?)\]$')  # "[+1.5]": hold 1.5s before the next word
 
 
 def word_seconds(word: str, base: float) -> float:
@@ -43,22 +49,30 @@ def main():
     p.add_argument('vid')
     p.add_argument('text')
     p.add_argument('--wpm', type=float, default=170, help='baseline words/minute (default 170: readable on-screen pace for silent kinetic text)')
+    p.add_argument('--pause', type=float, default=1.0, help='scale for punctuation pauses (default 1.0)')
     args = p.parse_args()
 
     base = 60 / args.wpm  # seconds for an "average" word before length/pause adjustment
-    words = args.text.split()
+    tokens = args.text.split()
+    words = [w for w in tokens if not HOLD.match(w)]
     if not words:
         raise SystemExit('empty script')
 
-    out, t = [], LEAD_IN
-    for w in words:
+    out, t, last_pause = [], LEAD_IN, 0.0
+    for w in tokens:
+        hold = HOLD.match(w)
+        if hold:
+            t += float(hold.group(1))
+            continue
         dur = word_seconds(w, base)
         s, e = round(t, 2), round(t + dur, 2)
         out.append({'w': w, 's': s, 'e': e})
-        t = e + PAUSE.get(w[-1], 0.06)
+        mark = w.rstrip('"\'”’')[-1:]  # punctuation before a closing quote still pauses: for?”
+        last_pause = PAUSE.get(mark, 0.06 / args.pause) * args.pause
+        t = e + last_pause
 
-    duration = round(t - PAUSE.get(words[-1][-1], 0.06) + 0.3, 2)  # small tail, no trailing pause
-    data = {'id': args.vid, 'duration': duration, 'text': args.text, 'words': out}
+    duration = round(t - last_pause + 0.3, 2)  # small tail, no trailing pause
+    data = {'id': args.vid, 'duration': duration, 'text': ' '.join(words), 'words': out}
     dest = os.path.join(ROOT, 'src/series/vo', f'{args.vid}.json')
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     with open(dest, 'w') as f:

@@ -171,7 +171,7 @@ export const Captions: React.FC<{theme: Theme; vo: VOData; y: number; size?: num
   const chunks: {i0: number; i1: number}[] = [];
   let i0 = 0;
   vo.words.forEach((w, i) => {
-    const endSentence = /[.?!,]$/.test(w.w);
+    const endSentence = /[.?!,]['"”’]?$/.test(w.w);
     if (i - i0 + 1 >= maxWords || endSentence || i === vo.words.length - 1) {
       chunks.push({i0, i1: i});
       i0 = i + 1;

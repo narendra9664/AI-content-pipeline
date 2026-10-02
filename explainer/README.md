@@ -99,6 +99,35 @@ These videos sell the same idea to different audiences: what buyers do *beneath*
 
 Captions, schedule and outreach scripts for posting the series are in `output/explainer-series/POSTING-KIT.md`.
 
+# The silent Instagram series (IG01–IG10)
+
+Ten 9:16 Reels with no voiceover: the on-screen text carries the script, so they work with the sound off. Each has its own palette and ends on the same CTA card.
+
+| ID | Look | Story |
+|---|---|---|
+| IG01 | lilac | Which lead buys first? A quiz: three leads, guess A, B or C |
+| IG02 | midnight | One buyer, 14 days, zero form fills (a diary nobody read) |
+| IG03 | sand | 3 signs a buyer is ready, and none of them is a form |
+| IG04 | emerald | POV: the buyer messages two developers at 9 PM |
+| IG05 | coral | Your ads work, your follow-up leaks (the leaky bucket) |
+| IG06 | volt | The first 60 seconds after an enquiry (stopwatch run) |
+| IG07 | ivory | Anatomy of a follow-up that books the viewing |
+| IG08 | teal | Never ask "So, what are you looking for?" (the pre-call brief) |
+| IG09 | aurora | The 8 PM speed test |
+| IG10 | brand | Your buyer's 9 PM is your 3 AM (24-hour dial) |
+
+## Pipeline (no voiceover)
+
+1. **Timing:** `python3 scripts/synth_vo.py ig01 "<script>" --wpm 175 --pause 1.25`.
+   - Writes `src/series/vo/ig01.json` in the same shape as a real aligned voiceover, so `at()`, `SpokenHeadline` and `make_srt.py` work unchanged.
+   - `--pause` stretches the pauses at punctuation so a line can be read before the next one replaces it.
+   - A standalone `[+1.5]` token holds for 1.5 s, for example IG01's countdown before the answer.
+2. **Render and finish:** as above (`npx remotion render src/index.ts IG01 out/series/IG01-raw.mp4`, then `finalize.py`). `<Soundtrack>` is used without its `vo` prop.
+3. **QA:** `node scripts/qa-stills.mjs IG01=30,200,400 IG02=60,300` renders stills for several videos from one bundle.
+4. **Covers and subtitles:** `node scripts/render-covers.mjs IG01 …` and `python3 scripts/make_srt.py`.
+
+Shared pieces for this series (stamp, comment prompt, progress ring, rewind sweep, log rows) are in `src/series/kit/Social.tsx`. Captions and the posting schedule are in `output/instagram-series/POSTING-KIT.txt`.
+
 ## Assets and licensing (series)
 
 - **ElevenLabs content:** the voiceovers, the three music beds, the SFX and the tower photo were generated on a free ElevenLabs plan. The free plan has no commercial licence and requires attribution.

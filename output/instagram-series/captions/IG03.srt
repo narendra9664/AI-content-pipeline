@@ -1,0 +1,39 @@
+1
+00:00:00,150 --> 00:00:02,260
+3 signs a buyer is ready.
+
+2
+00:00:02,530 --> 00:00:04,630
+None of them is a form.
+
+3
+00:00:04,910 --> 00:00:07,210
+One: they keep coming back.
+
+4
+00:00:07,490 --> 00:00:10,140
+Two: they download the floor plans.
+
+5
+00:00:10,420 --> 00:00:12,840
+Three: they ask how to pay.
+
+6
+00:00:13,120 --> 00:00:13,980
+All three?
+
+7
+00:00:14,260 --> 00:00:15,180
+Call today.
+
+8
+00:00:15,460 --> 00:00:17,750
+frontdesk AI flags them for you.
+
+9
+00:00:18,020 --> 00:00:19,990
+Never miss a ready buyer.
+
+10
+00:00:20,260 --> 00:00:22,090
+DM us the word AUDIT.

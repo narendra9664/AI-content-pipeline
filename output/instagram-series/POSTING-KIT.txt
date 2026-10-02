@@ -1,0 +1,285 @@
+FRONTDESK AI: INSTAGRAM SERIES POSTING KIT (NO VOICEOVER)
+==============================
+
+Ten silent Reels, built to be watched with the sound off. The on-screen text carries the whole script.
+
+Every video ends on the same direct call to action: DM us "AUDIT". So the captions below use soft ones: a comment, a save or a share. That keeps the grid from reading as one long advert.
+
+Every caption sits between two dashed lines. Copy everything between the lines, and nothing else.
+
+
+CONTENTS
+
+1. What's in the package
+2. Posting schedule (3 a week)
+3. How to post
+4. Captions (IG01 to IG10)
+5. Claims to confirm
+
+
+1. WHAT'S IN THE PACKAGE
+==============================
+
+- POSTING-KIT.txt: this file.
+- covers folder: one 9:16 cover per video, IG01-cover.jpg to IG10-cover.jpg.
+- captions folder: one subtitle file (.srt) per video. Instagram doesn't need them, because the text is already on screen. Use them for YouTube Shorts, Facebook or LinkedIn.
+- The videos (MP4, 1080x1920) were sent separately. They can be rebuilt from the explainer folder in the GitHub repo.
+
+The 10 videos:
+
+- IG01 (27 seconds): "Which lead buys first?" A quiz: three leads, guess A, B or C.
+- IG02 (28 seconds): "14 days. Zero form fills." One buyer's diary that nobody read.
+- IG03 (24 seconds): "3 signs a buyer is ready." None of them is a form.
+- IG04 (25 seconds): "Which one are you?" POV: the buyer messages two developers at 9 PM.
+- IG05 (23 seconds): "Your follow-up is leaking." The leaky bucket.
+- IG06 (24 seconds): "The first 60 seconds." A stopwatch run from enquiry to booked viewing.
+- IG07 (24 seconds): "The reply that books viewings." One message, five annotated parts.
+- IG08 (25 seconds): "Never open a call blind." The pre-call brief.
+- IG09 (24 seconds): "Take the 8 PM test." Enquire on your own site tonight and time the reply.
+- IG10 (22 seconds): "Their 9 PM is your 3 AM." Overseas buyers and office hours on a 24-hour dial.
+
+
+2. POSTING SCHEDULE (3 A WEEK)
+==============================
+
+Monday, Wednesday and Friday. The order alternates light and dark covers, so the grid doesn't clump, and spreads out the comment prompts.
+
+Week 1
+- Monday: IG01 "Which lead buys first?" (comment prompt)
+- Wednesday: IG04 "Which one are you?" (comment prompt)
+- Friday: IG03 "3 signs a buyer is ready" (save)
+
+Week 2
+- Monday: IG02 "14 days. Zero form fills."
+- Wednesday: IG05 "Your follow-up is leaking"
+- Friday: IG07 "The reply that books viewings" (save)
+
+Week 3
+- Monday: IG06 "The first 60 seconds"
+- Wednesday: IG09 "Take the 8 PM test" (comment prompt)
+- Friday: IG08 "Never open a call blind"
+
+Week 4
+- Monday: IG10 "Their 9 PM is your 3 AM"
+
+Time of day: start with 7 to 9 PM local. After two weeks, move it to the "Most active times" Instagram shows under Insights.
+
+
+3. HOW TO POST
+==============================
+
+- Upload the MP4 as a Reel. Under "Edit cover", choose "Add from camera roll" and pick the matching file from the covers folder, for example covers/IG01-cover.jpg for IG01.
+- The cover titles sit inside the area Instagram shows in the profile grid, so they stay readable there.
+- Paste the caption from section 4. Each one has five hashtags, because Instagram now allows at most five per post or Reel.
+- In the first hour, reply to every comment. On IG01 and IG09, reply with the answer and a question back. That turns a comment into a conversation, and conversations lead to DMs.
+- Sound: each video has a music bed and sound effects. They come from your free ElevenLabs plan, which has no commercial licence. Before these run as business posts, either upgrade the plan, or add a track from Instagram's own music library in the Reels editor and turn the video's original audio down to zero.
+
+
+4. CAPTIONS (IG01 TO IG10)
+==============================
+
+
+IG01 · Which lead buys first?
+Length: 27 seconds
+Cover: covers/IG01-cover.jpg
+------------------------------
+Three new leads. Only one is ready to buy.
+
+A filled in a form today.
+B went quiet three weeks ago.
+C opened your newsletter.
+
+Most teams call A first, because A is newest. In this example the ready buyer is B. She never filled in another form, but she came back four times this week, downloaded the floor plans and opened the price list.
+
+Your inbox shows you who typed something. It doesn't show you who's ready.
+
+Comment A, B or C before you watch the answer.
+
+#luxuryrealestate #realestatemarketing #realestateleads #proptech #salesautomation
+------------------------------
+
+
+IG02 · 14 days. Zero form fills.
+Length: 28 seconds
+Cover: covers/IG02-cover.jpg
+------------------------------
+One buyer. 14 days. Zero form fills.
+
+Day 1: clicked your newsletter.
+Day 3: back on the penthouse page.
+Day 6: downloaded the floor plans.
+Day 9: read the payment plans at 11 PM.
+Day 14: booked a viewing with another developer.
+
+Every one of those was a buying signal. None of them was a form, so nobody called.
+
+Day 6 was the moment to pick up the phone.
+
+Save this for your next sales meeting.
+
+#luxuryrealestate #realestatemarketing #realestateleads #propertydevelopment #proptech
+------------------------------
+
+
+IG03 · 3 signs a buyer is ready
+Length: 24 seconds
+Cover: covers/IG03-cover.jpg
+------------------------------
+3 signs a buyer is ready, and none of them is a form.
+
+1. They keep coming back to the same unit.
+2. They download the floor plans.
+3. They ask how payment works.
+
+See all three from the same person? Call them today, not next week.
+
+Save this, and send it to whoever picks up your leads.
+
+#luxuryrealestate #realestatemarketing #realestateleads #realestateagent #proptech
+------------------------------
+
+
+IG04 · Which one are you?
+Length: 25 seconds
+Cover: covers/IG04-cover.jpg
+------------------------------
+POV: you're ready to buy, and at 9 PM you message two developers.
+
+One replies in 2 minutes with two viewing times.
+The other replies at 9:14 the next morning: "Dear customer, thank you for your enquiry."
+
+By then you've booked with the first one.
+
+Be honest: which developer is your team?
+
+#luxuryrealestate #realestatemarketing #realestateleads #customerexperience #proptech
+------------------------------
+
+
+IG05 · Your follow-up is leaking
+Length: 23 seconds
+Cover: covers/IG05-cover.jpg
+------------------------------
+Your ads are working. Your follow-up isn't.
+
+The leads come in, then leak out:
+Late replies.
+No replies.
+No second message.
+
+More ad spend only pours more into a leaking bucket. Fix the follow-up first, then scale the ads.
+
+Which leak is the biggest in your team right now?
+
+#luxuryrealestate #realestatemarketing #realestateleads #leadgeneration #proptech
+------------------------------
+
+
+IG06 · The first 60 seconds
+Length: 24 seconds
+Cover: covers/IG06-cover.jpg
+------------------------------
+The first 60 seconds after a buyer enquires, done right:
+
+0:01 The enquiry lands.
+0:03 Her history loads: 4 visits, the floor plans.
+0:05 Scored 88. Hot.
+0:08 A personal reply goes out.
+0:15 Your agent gets a short brief.
+0:41 She replies.
+0:52 Viewing booked.
+
+That's a sample timeline, sped up in the video. The point stands: the first reply should land while she's still on your site.
+
+How long does your first reply take today?
+
+#luxuryrealestate #realestatemarketing #realestateleads #salesautomation #proptech
+------------------------------
+
+
+IG07 · The reply that books viewings
+Length: 24 seconds
+Cover: covers/IG07-cover.jpg
+------------------------------
+Anatomy of a follow-up that books the viewing:
+
+1. Her name. Never "Dear customer".
+2. The exact unit she looked at, not "our project".
+3. Something useful, based on what she looked at.
+4. Two clear times to choose from, not "let me know".
+5. A real person's name at the end.
+
+Then send it in seconds, not tomorrow.
+
+Save this for the next follow-up you write.
+
+#luxuryrealestate #realestatemarketing #realestateagent #salestips #proptech
+------------------------------
+
+
+IG08 · Never open a call blind
+Length: 25 seconds
+Cover: covers/IG08-cover.jpg
+------------------------------
+Never ask a buyer "So, what are you looking for?"
+
+They've already told you, just not in words:
+4 visits to Penthouse 42A.
+Downloaded the floor plans.
+Read the payment plans twice.
+Always browses after 8 PM.
+
+Put that in a short brief before the call, and you can open with what they care about: "Did the 42A floor plans answer your questions about the terrace?"
+
+Send this to your sales team.
+
+#luxuryrealestate #realestateagent #realestatemarketing #salestips #proptech
+------------------------------
+
+
+IG09 · Take the 8 PM test
+Length: 24 seconds
+Cover: covers/IG09-cover.jpg
+------------------------------
+Try this tonight.
+
+At 8 PM, enquire on your own website as if you were a buyer. Start a timer.
+
+5 minutes? An hour? Tomorrow morning?
+
+Your buyers are running this test anyway, and they're often asking more than one developer.
+
+Comment your time below. It's the most useful number you'll measure this week.
+
+#luxuryrealestate #realestatemarketing #realestateleads #customerexperience #proptech
+------------------------------
+
+
+IG10 · Their 9 PM is your 3 AM
+Length: 22 seconds
+Cover: covers/IG10-cover.jpg
+------------------------------
+Your buyer's 9 PM is your 3 AM.
+
+Overseas buyers enquire on their time, not yours. If your team works 9 to 7, every enquiry that lands in the other 14 hours waits until morning. So does the buyer's attention.
+
+An instant first reply means they hear from you in seconds, whatever the time zone. Your team picks up the conversation when the office opens.
+
+Where are most of your overseas buyers based?
+
+#luxuryrealestate #internationalrealestate #realestatemarketing #realestateleads #proptech
+------------------------------
+
+
+5. CLAIMS TO CONFIRM
+==============================
+
+The videos show the following. Keep each one only if it's true for what you sell today.
+
+[ ] Speed: a personal first reply within seconds (IG06, IG07, IG09, IG10). The demo on your website does this by email once it's deployed. "8 seconds" and the IG06 timeline are sample numbers.
+[ ] Channel: IG07 shows the reply arriving on WhatsApp, and IG09 shows a WhatsApp notification. The demo replies by email. Offer WhatsApp only once you can deliver it, which needs the WhatsApp Business API.
+[ ] Scoring: buyers are scored on what they do (IG01, IG03, IG06). The demo scores every visitor who accepts tracking.
+[ ] Alerts without a form: IG02 shows a known buyer flagged on day 6 without filling in a new form. The demo alerts you only when someone fills in the form. Recognising a buyer from a newsletter click needs personalised links, which aren't built yet.
+[ ] Agent brief: your team gets a short brief on each hot lead (IG06, IG08). The demo emails one to you when a lead fills in the form.
+
+All names, scores, times and companies in the videos are illustrative. That includes VELORIA, Sarah K., Maya and "Solenne Residences".

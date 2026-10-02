@@ -1,0 +1,43 @@
+1
+00:00:00,150 --> 00:00:02,390
+POV: you're ready to buy.
+
+2
+00:00:02,670 --> 00:00:05,560
+At 9 PM, you message two developers.
+
+3
+00:00:05,830 --> 00:00:07,850
+One replies in 2 minutes.
+
+4
+00:00:08,120 --> 00:00:09,850
+The other: delivered,
+
+5
+00:00:09,890 --> 00:00:10,740
+not read.
+
+6
+00:00:11,020 --> 00:00:12,870
+You book with the first.
+
+7
+00:00:13,140 --> 00:00:15,320
+The second replies next morning.
+
+8
+00:00:15,600 --> 00:00:16,480
+Too late.
+
+9
+00:00:16,750 --> 00:00:18,340
+Which one are you?
+
+10
+00:00:18,610 --> 00:00:20,870
+Reply while they're still looking.
+
+11
+00:00:21,140 --> 00:00:22,970
+DM us the word AUDIT.
