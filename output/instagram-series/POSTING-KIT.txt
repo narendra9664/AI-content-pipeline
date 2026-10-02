@@ -21,6 +21,7 @@ CONTENTS
 ==============================
 
 - POSTING-KIT.txt: this file.
+- grid-preview.jpg: how your profile grid will look once all 10 are posted in this order.
 - covers folder: one 9:16 cover per video, IG01-cover.jpg to IG10-cover.jpg.
 - captions folder: one subtitle file (.srt) per video. Instagram doesn't need them, because the text is already on screen. Use them for YouTube Shorts, Facebook or LinkedIn.
 - The videos (MP4, 1080x1920) were sent separately. They can be rebuilt from the explainer folder in the GitHub repo.
@@ -52,10 +53,10 @@ Week 1
 Week 2
 - Monday: IG02 "14 days. Zero form fills."
 - Wednesday: IG05 "Your follow-up is leaking"
-- Friday: IG07 "The reply that books viewings" (save)
+- Friday: IG06 "The first 60 seconds"
 
 Week 3
-- Monday: IG06 "The first 60 seconds"
+- Monday: IG07 "The reply that books viewings" (save)
 - Wednesday: IG09 "Take the 8 PM test" (comment prompt)
 - Friday: IG08 "Never open a call blind"
 
@@ -72,7 +73,7 @@ Time of day: start with 7 to 9 PM local. After two weeks, move it to the "Most a
 - The cover titles sit inside the area Instagram shows in the profile grid, so they stay readable there.
 - Paste the caption from section 4. Each one has five hashtags, because Instagram now allows at most five per post or Reel.
 - In the first hour, reply to every comment. On IG01 and IG09, reply with the answer and a question back. That turns a comment into a conversation, and conversations lead to DMs.
-- Sound: each video has a music bed and sound effects. They come from your free ElevenLabs plan, which has no commercial licence. Before these run as business posts, either upgrade the plan, or add a track from Instagram's own music library in the Reels editor and turn the video's original audio down to zero.
+- Sound: each video has a music bed and sound effects. They come from your free ElevenLabs plan, which has no commercial licence. Before these run as business posts, either upgrade the plan and regenerate the music and effects, or add a track from Instagram's own music library in the Reels editor and turn the video's original audio down to zero.
 
 
 4. CAPTIONS (IG01 TO IG10)
